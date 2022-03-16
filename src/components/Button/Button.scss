@@ -1,0 +1,11 @@
+.button {
+  padding: 12px 24px;
+  background-color: var(--active);
+  color: white;
+  border-radius: 8px;
+  transition: var(--base-transition);
+
+  &:hover {
+    background-color: var(--activeDark);
+  }
+}

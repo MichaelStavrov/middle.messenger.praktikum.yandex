@@ -1,0 +1,9 @@
+.custom-link {
+  color: var(--active);
+  text-align: center;
+  transition: var(--base-transition);
+
+  &:hover {
+    color: var(--activeDark);
+  }
+}
