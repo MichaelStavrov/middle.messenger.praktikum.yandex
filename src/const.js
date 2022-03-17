@@ -1,9 +1,10 @@
 export const routes = {
+  chats: '/',
   signIn: '/sign-in',
   signUp: '/sign-up',
-  chats: '/chats',
   userProfile: '/user-profile',
-  changeUserOptions: '/user-profile/change/id',
+  updateUserInfo: '/update-user-info',
+  updateUserPassword: '/update-user-password',
   serverErrorPage: '/server-error',
   notFound: '/*',
 };

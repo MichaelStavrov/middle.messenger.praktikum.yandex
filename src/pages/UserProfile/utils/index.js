@@ -1,5 +1,5 @@
-import Button from '../../../components/Button';
 import CustomLink from '../../../components/CustomLink';
+import { routes } from '../../../const';
 
 export const userInfoRows = [
   { label: 'Почта', value: 'danchik@yandex.ru' },
@@ -10,8 +10,14 @@ export const userInfoRows = [
   { label: 'Телефон', value: '+0 (000) 000 00 00' },
 ];
 
+const { updateUserInfo, updateUserPassword, signIn } = routes;
+
 export const userOptions = [
-  CustomLink({ href: '/change-data', linkName: 'Изменить данные' }),
-  CustomLink({ href: '/change-password', linkName: 'Изменить пароль' }),
-  Button({ buttonText: 'Выйти', className: 'linkViewButton' }),
+  CustomLink({ href: updateUserInfo, linkName: 'Изменить данные' }),
+  CustomLink({ href: updateUserPassword, linkName: 'Изменить пароль' }),
+  CustomLink({
+    href: signIn,
+    linkName: 'Выйти',
+    addClassName: 'danger',
+  }),
 ];

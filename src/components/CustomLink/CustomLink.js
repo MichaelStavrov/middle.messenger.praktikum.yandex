@@ -3,12 +3,22 @@ import createElementWithAttrs from '../../utils/createElementWithAttrs';
 import template from './CustomLink.tmpl';
 import './CustomLink.scss';
 
-const CustomLink = ({ href, linkName, activeLink, className, ...props }) => {
+const CustomLink = ({
+  href,
+  linkName,
+  activeLink,
+  className,
+  addClassName,
+  ...props
+}) => {
   let currentClass = '';
   if (activeLink && window.location.pathname === href) {
     currentClass = 'active-link';
   } else {
     currentClass = className ?? 'custom-link';
+  }
+  if (addClassName) {
+    currentClass += ` ${addClassName}`;
   }
 
   createElementWithAttrs({

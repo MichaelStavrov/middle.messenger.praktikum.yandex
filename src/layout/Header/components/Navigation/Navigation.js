@@ -4,16 +4,26 @@ import { routes } from '../../../../const';
 import template from './Navigation.tmpl';
 import './Navigation.scss';
 
-const { serverErrorPage, chats, userProfile, notFound, signIn, signUp } =
-  routes;
+const {
+  serverErrorPage,
+  chats,
+  userProfile,
+  notFound,
+  signIn,
+  signUp,
+  updateUserInfo,
+  updateUserPassword,
+} = routes;
 
 const links = [
-  { href: serverErrorPage, linkName: 'Страница 500' },
-  { href: chats, linkName: 'Страница с чатами' },
-  { href: notFound, linkName: 'Страница 404' },
-  { href: userProfile, linkName: 'Страница Профиля' },
-  { href: signIn, linkName: 'Страница Входа' },
-  { href: signUp, linkName: 'Страница Регистрации' },
+  { href: signUp, linkName: 'Регистрация' },
+  { href: signIn, linkName: 'Вход' },
+  { href: chats, linkName: 'Чаты' },
+  { href: userProfile, linkName: 'Профиль' },
+  { href: updateUserInfo, linkName: 'Изменение данных' },
+  { href: updateUserPassword, linkName: 'Изменение пароля' },
+  { href: notFound, linkName: '404' },
+  { href: serverErrorPage, linkName: '500' },
 ];
 
 const Navigation = (props) =>
