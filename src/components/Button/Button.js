@@ -3,11 +3,11 @@ import createElementWithAttrs from '../../utils/createElementWithAttrs';
 import template from './Button.tmpl';
 import './Button.scss';
 
-const Button = ({ buttonText, ...props }) => {
+const Button = ({ buttonText, className, ...props }) => {
   createElementWithAttrs({
     elementName: 'button',
     attrs: {
-      class: 'button',
+      class: className ?? 'button',
       optional: {
         type: 'button',
       },

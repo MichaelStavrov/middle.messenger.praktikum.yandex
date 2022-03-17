@@ -1,7 +1,7 @@
 const template = `
-  <div class="page-container">
+  <section class="page-container">
     {{{ content }}}
-  </div>
+  </section>
 `;
 
 export default template;

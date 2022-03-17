@@ -1,11 +1,9 @@
+import App from './components/App/App';
 import Page from './layout/Page';
-import SignIn from './pages/SignIn/SignIn';
-import SignUp from './pages/SignUp';
+import routing from './utils/routing';
 
 const root = document.getElementById('root');
-root.innerHTML = Page({
-  content: window.location.pathname === '/sign-up' ? SignUp() : SignIn(),
-});
+root.innerHTML = App();
 
 // const data = {
 //   list: [

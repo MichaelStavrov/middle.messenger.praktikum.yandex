@@ -7,3 +7,8 @@
     color: var(--activeDark);
   }
 }
+
+.active-link {
+  color: var(--activeDark);
+  text-decoration: underline;
+}
