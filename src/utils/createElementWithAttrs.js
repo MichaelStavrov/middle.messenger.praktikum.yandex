@@ -1,4 +1,4 @@
-import Handlebars from 'Handlebars';
+import Handlebars from 'handlebars';
 
 const createElementWithAttrs = ({ elementName, attrs, textContent }) => {
   Handlebars.registerHelper(elementName, (context) => {
