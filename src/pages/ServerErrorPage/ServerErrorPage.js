@@ -1,13 +1,13 @@
 import ComingSoonPage from '../../layout/ComingSoonPage/ComingSoonPage';
 import CustomLink from '../../components/CustomLink';
-import { routes } from '../../const';
+import { ROUTES } from '../../const';
 
 const ServerErrorPage = () =>
   ComingSoonPage({
     title: '500',
     subtitle: 'Мы уже фиксим',
     link: CustomLink({
-      href: routes.chats,
+      href: ROUTES.chats,
       linkName: 'Назад к чатам',
     }),
   });

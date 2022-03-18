@@ -6,7 +6,7 @@ import SignUp from '../pages/SignUp';
 import UserProfile from '../pages/UserProfile';
 import UpdateUserInfo from '../pages/UpdateUserInfo';
 import UpdateUserPassword from '../pages/UpdateUserPassword';
-import { routes } from '../const';
+import { ROUTES } from '../const';
 
 const routing = (endpoint) => {
   const {
@@ -17,7 +17,7 @@ const routing = (endpoint) => {
     serverErrorPage,
     updateUserInfo,
     updateUserPassword,
-  } = routes;
+  } = ROUTES;
 
   switch (endpoint) {
     case chats:

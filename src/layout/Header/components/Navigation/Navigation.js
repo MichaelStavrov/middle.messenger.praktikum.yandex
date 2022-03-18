@@ -1,6 +1,6 @@
 import CustomLink from '../../../../components/CustomLink';
 import myCompile from '../../../../utils/myCompile';
-import { routes } from '../../../../const';
+import { ROUTES } from '../../../../const';
 import template from './Navigation.tmpl';
 import './Navigation.scss';
 
@@ -13,7 +13,7 @@ const {
   signUp,
   updateUserInfo,
   updateUserPassword,
-} = routes;
+} = ROUTES;
 
 const links = [
   { href: signUp, linkName: 'Регистрация' },

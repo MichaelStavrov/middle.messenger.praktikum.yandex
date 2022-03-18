@@ -1,13 +1,13 @@
 import ComingSoonPage from '../../layout/ComingSoonPage/ComingSoonPage';
 import CustomLink from '../../components/CustomLink';
-import { routes } from '../../const';
+import { ROUTES } from '../../const';
 
 const Chats = () =>
   ComingSoonPage({
     title: 'Чаты',
     subtitle: 'Наполняем чаты сообщениями...',
     link: CustomLink({
-      href: routes.userProfile,
+      href: ROUTES.userProfile,
       linkName: 'Профиль',
     }),
   });

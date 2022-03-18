@@ -1,5 +1,5 @@
 import CustomLink from '../../../components/CustomLink';
-import { routes } from '../../../const';
+import { ROUTES } from '../../../const';
 
 export const userInfoRows = [
   { label: 'Почта', value: 'danchik@yandex.ru' },
@@ -10,7 +10,7 @@ export const userInfoRows = [
   { label: 'Телефон', value: '+0 (000) 000 00 00' },
 ];
 
-const { updateUserInfo, updateUserPassword, signIn } = routes;
+const { updateUserInfo, updateUserPassword, signIn } = ROUTES;
 
 export const userOptions = [
   CustomLink({ href: updateUserInfo, linkName: 'Изменить данные' }),

@@ -3,7 +3,7 @@ import UserInfo from './components/UserInfo';
 import UserOptions from './components/UserOptions';
 import myCompile from '../../utils/myCompile';
 import { userInfoRows, userOptions } from './utils';
-import { routes } from '../../const';
+import { ROUTES } from '../../const';
 import userImage from '../../assets/dan_abramov.jpeg';
 import iconBack from '../../assets/arrow-back.svg';
 import template from './UserProfile.tmpl';
@@ -14,7 +14,7 @@ const UserProfile = (props) =>
     template,
     props: {
       ...props,
-      href: routes.chats,
+      href: ROUTES.chats,
       icon: iconBack,
       avatar: UserAvatar({
         image: `${userImage}`,

@@ -1,4 +1,4 @@
-export const routes = {
+export const ROUTES = {
   chats: '/',
   signIn: '/sign-in',
   signUp: '/sign-up',
