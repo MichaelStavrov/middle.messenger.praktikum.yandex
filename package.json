@@ -7,9 +7,9 @@
     "main": false
   },
   "scripts": {
-    "dev": "parcel index.html",
-    "build": "parcel build index.html",
-    "start": "start http://localhost:3000 & node server.js"
+    "dev": "parcel index.html --no-cache",
+    "build": "parcel build index.html --no-cache",
+    "start": "node ./server.js"
   },
   "keywords": [],
   "author": "",
