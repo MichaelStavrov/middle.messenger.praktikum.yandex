@@ -1,0 +1,25 @@
+{
+  "name": "messenger",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "targets": {
+    "main": false
+  },
+  "scripts": {
+    "dev": "parcel index.html --no-cache",
+    "build": "parcel build index.html --no-cache",
+    "start": "node ./server.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@anikin/parcel-transformer-handlebars": "1.0.9",
+    "@parcel/transformer-sass": "2.3.2",
+    "express": "4.17.3",
+    "parcel": "2.3.2",
+    "path-browserify": "1.0.1",
+    "process": "0.11.10"
+  }
+}

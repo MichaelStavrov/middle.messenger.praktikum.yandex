@@ -1,0 +1,18 @@
+.custom-link {
+  color: var(--active);
+  text-align: center;
+  transition: var(--base-transition);
+
+  &:hover {
+    color: var(--activeDark);
+  }
+}
+
+.active-link {
+  color: var(--activeDark);
+  text-decoration: underline;
+}
+
+.danger {
+  color: var(--danger);
+}
