@@ -14,12 +14,16 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
+  "@parcel/transformer-css": {
+    "cssModules": true
+  },
   "devDependencies": {
     "@anikin/parcel-transformer-handlebars": "1.0.9",
     "@parcel/transformer-sass": "2.3.2",
     "express": "4.17.3",
     "parcel": "2.3.2",
     "path-browserify": "1.0.1",
-    "process": "0.11.10"
+    "process": "0.11.10",
+    "typescript": "^4.6.3"
   }
 }
