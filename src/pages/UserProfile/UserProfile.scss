@@ -34,7 +34,7 @@
   padding: 10px 0;
   display: flex;
   justify-content: space-between;
-  border-bottom: 1px solid var(--lightGray);
+  border-bottom: 1px solid var(--light-gray);
   font-weight: 500;
 
   &:last-child {
@@ -43,5 +43,5 @@
 }
 
 .user-info-value {
-  color: var(--darkShadow);
+  color: var(--dark-shadow);
 }
