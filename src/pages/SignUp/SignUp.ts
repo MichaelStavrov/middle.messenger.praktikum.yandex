@@ -192,15 +192,7 @@ export class SignUpPage extends Block {
             placeholder="Email"
             name="email"
             onFocus=onFocus
-          }}}
-          {{{TextField
-            error="${errors.first_name}"
-            value="${values.first_name}"
-            type="text"
-            placeholder="Имя"
-            name="first_name"
-            onFocus=onFocus
-          }}}
+          }}} 
           {{{TextField
             value="${values.login}"
             error="${errors.login}"

@@ -238,18 +238,12 @@ export default class Block<P = any> {
     return fragment.content;
   }
 
-  // show() {
-  //   this.getContent().style.display = 'block';
-  // }
-
   hideErrorMessage(inputElem: HTMLInputElement) {
     const parentElem = inputElem.parentElement;
     const errorElem = parentElem?.querySelector(
       '#text-field-error'
     ) as HTMLElement;
     errorElem.style.visibility = 'hidden';
-
-    // this.getContent().style.display = 'none';
   }
 
   validateForm({ errorsState, inputName, inputValue }: ValidateForm) {
@@ -257,7 +251,7 @@ export default class Block<P = any> {
       case 'first_name':
       case 'second_name':
         if (!inputValue.match(/^[A-Z|А-Я]/)) {
-          errorsState[inputName] = 'Имя должно быть с заглавной буквы';
+          errorsState[inputName] = 'Должно быть с заглавной буквы';
         } else if (!inputValue.match(/^[(a-zA-Z)|(а-яА-Я)|-]+$/)) {
           errorsState[inputName] = 'Только буквы или знак дефиса';
         } else {
