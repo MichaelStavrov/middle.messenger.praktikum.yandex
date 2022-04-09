@@ -2,7 +2,6 @@ import Header from '../Header';
 
 import Block from '../../utils/Block';
 import { registerComponent } from '../../utils';
-import routing from '../../utils/routing';
 import './App.scss';
 
 registerComponent(Header);

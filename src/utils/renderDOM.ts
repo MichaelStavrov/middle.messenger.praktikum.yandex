@@ -5,6 +5,8 @@ export default function renderDOM(BlockPage: typeof Block) {
 
   const root = document.querySelector('#root');
 
-  root!.innerHTML = '';
-  root!.appendChild(block.getContent());
+  if (root) {
+    root.innerHTML = '';
+    root.appendChild(block.getContent());
+  }
 }

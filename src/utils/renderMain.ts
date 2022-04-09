@@ -13,7 +13,8 @@ export default function renderMain() {
   const block = new CurrentPage();
 
   const root = document.querySelector('#main-content');
-
-  root!.innerHTML = '';
-  root!.appendChild(block.getContent());
+  if (root) {
+    root.innerHTML = '';
+    root.appendChild(block.getContent());
+  }
 }

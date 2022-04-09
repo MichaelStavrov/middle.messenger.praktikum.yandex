@@ -9,7 +9,7 @@ export class UpdateUserPassword extends Block {
         newPassword: '',
         confirmPassword: '',
       },
-      onSave: () => {},
+      // onSave: () => {},
     };
   }
 

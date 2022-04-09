@@ -12,7 +12,7 @@ export class UpdateUserInfo extends Block {
         pseudonym: 'pseudonym',
         phone: 'phone',
       },
-      onSave: () => {},
+      // onSave: () => {},
     };
   }
 

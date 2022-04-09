@@ -23,7 +23,7 @@ export default class Block<P = any> {
   } as const;
 
   public id = nanoid(6);
-  private readonly _meta: BlockMeta;
+  // private readonly _meta: BlockMeta;
 
   protected _element: Nullable<HTMLElement> = null;
   protected readonly props: P;
@@ -37,9 +37,9 @@ export default class Block<P = any> {
   public constructor(props?: P) {
     const eventBus = new EventBus<Events>();
 
-    this._meta = {
-      props,
-    };
+    // this._meta = {
+    //   props,
+    // };
 
     this.getStateFromProps(props);
 
@@ -131,7 +131,6 @@ export default class Block<P = any> {
   }
 
   getContent(): HTMLElement {
-    // Хак, чтобы вызвать CDM только после добавления в DOM
     if (this.element?.parentNode?.nodeType === Node.DOCUMENT_FRAGMENT_NODE) {
       setTimeout(() => {
         if (
@@ -146,22 +145,18 @@ export default class Block<P = any> {
   }
 
   _makePropsProxy(props: any): any {
-    // Можно и так передать this
-    // Такой способ больше не применяется с приходом ES6+
-    const self = this;
+    // const self = this;
 
     return new Proxy(props as unknown as object, {
       get(target: Record<string, unknown>, prop: string) {
         const value = target[prop];
         return typeof value === 'function' ? value.bind(target) : value;
       },
-      set(target: Record<string, unknown>, prop: string, value: unknown) {
+      set: (target: Record<string, unknown>, prop: string, value: unknown) => {
         const oldProps = { ...target };
         target[prop] = value;
 
-        // Запускаем обновление компоненты
-        // Плохой cloneDeep, в след итерации нужно заставлять добавлять cloneDeep им самим
-        self.eventBus().emit(Block.EVENTS.FLOW_CDU, { ...oldProps }, target);
+        this.eventBus().emit(Block.EVENTS.FLOW_CDU, { ...oldProps }, target);
         return true;
       },
       deleteProperty() {
@@ -272,7 +267,7 @@ export default class Block<P = any> {
       case 'login':
         if (inputValue.length < 3 || inputValue.length > 20) {
           errorsState[inputName] = 'От 3 до 20 символов';
-        } else if (!inputValue.match(/^[(a-zA-Z)|\d|\-|\_]+$/)) {
+        } else if (!inputValue.match(/^[(a-zA-Z)|\d|\-|_]+$/)) {
           errorsState[inputName] =
             'Латиница, цифры без пробелов, знаки - или _';
         } else if (!inputValue.match(/[a-zA-Z]/)) {
