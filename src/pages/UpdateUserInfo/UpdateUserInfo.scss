@@ -1,4 +1,40 @@
-.update-user-info {
+.update-user-info-content {
   display: flex;
+  align-items: center;
   justify-content: center;
+  height: 100%;
+}
+
+.update-user-info-form {
+  max-width: 340px;
+  width: 100%;
+  padding: 30px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  box-shadow: var(--base-shadow);
+  border-radius: 12px;
+  background-color: var(--background-white);
+}
+
+.update-user-info-title {
+  margin-top: 30px;
+  font-size: 20px;
+  font-weight: 500;
+  text-align: center;
+}
+
+.update-user-info-fieldset {
+  width: 100%;
+  margin: 24px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.update-user-info-contolr {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
 }

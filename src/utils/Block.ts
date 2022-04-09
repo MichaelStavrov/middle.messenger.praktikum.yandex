@@ -1,146 +1,155 @@
-import { nanoid } from 'nanoid';
-
 import EventBus from './EventBus';
+import { nanoid } from 'nanoid';
+import Handlebars from 'handlebars';
 
-class Block {
+interface BlockMeta<P = any> {
+  props: P;
+}
+
+interface ValidateForm {
+  errorsState: Record<string, string>;
+  inputName: string;
+  inputValue: string;
+}
+
+type Events = Values<typeof Block.EVENTS>;
+
+export default class Block<P = any> {
   static EVENTS = {
     INIT: 'init',
     FLOW_CDM: 'flow:component-did-mount',
-    FLOW_RENDER: 'flow:render',
     FLOW_CDU: 'flow:component-did-update',
-  };
+    FLOW_RENDER: 'flow:render',
+  } as const;
 
   public id = nanoid(6);
+  private readonly _meta: BlockMeta;
 
-  _element: any = null;
-  _meta: any = null;
-  protected props: any = null;
-  protected children: Record<string, Block>;
-  eventBus: any = null;
+  protected _element: Nullable<HTMLElement> = null;
+  protected readonly props: P;
+  protected children: { [id: string]: Block } = {};
 
-  /** JSDoc
-   * @param {string} tagName
-   * @param {Object} props
-   *
-   * @returns {void}
-   */
-  constructor(propsAndChildren: any = {}) {
-    const eventBus = new EventBus();
+  eventBus: () => EventBus<Events>;
 
-    const { props, children } = this.getChildren(propsAndChildren);
+  protected state: any = {};
+  protected refs: { [key: string]: HTMLElement } = {};
+
+  public constructor(props?: P) {
+    const eventBus = new EventBus<Events>();
 
     this._meta = {
       props,
     };
 
-    this.props = this._makePropsProxy(props);
+    this.getStateFromProps(props);
 
-    this.children = children;
-
-    this.initChildren();
+    this.props = this._makePropsProxy(props || ({} as any));
+    this.state = this._makePropsProxy(this.state);
 
     this.eventBus = () => eventBus;
 
     this._registerEvents(eventBus);
-    eventBus.emit(Block.EVENTS.INIT);
+
+    eventBus.emit(Block.EVENTS.INIT, this.props);
   }
 
-  getChildren(propsAndChildren: any) {
-    const children: any = {};
-    const props: any = {};
-
-    Object.entries(propsAndChildren).map(([key, value]) => {
-      if (value instanceof Block) {
-        children[key] = value;
-      } else if (
-        Array.isArray(value) &&
-        value.every((v) => v instanceof Block)
-      ) {
-        children[key] = value;
-      } else {
-        props[key] = value;
-      }
-    });
-
-    return { props, children };
-  }
-
-  _registerEvents(eventBus) {
+  _registerEvents(eventBus: EventBus<Events>) {
     eventBus.on(Block.EVENTS.INIT, this.init.bind(this));
     eventBus.on(Block.EVENTS.FLOW_CDM, this._componentDidMount.bind(this));
     eventBus.on(Block.EVENTS.FLOW_CDU, this._componentDidUpdate.bind(this));
     eventBus.on(Block.EVENTS.FLOW_RENDER, this._render.bind(this));
   }
 
+  _createResources() {
+    this._element = this._createDocumentElement('div');
+  }
+
+  protected getStateFromProps(props: any): void {
+    this.state = {};
+  }
+
   init() {
-    this.eventBus().emit(Block.EVENTS.FLOW_RENDER);
+    this._createResources();
+    this.eventBus().emit(Block.EVENTS.FLOW_RENDER, this.props);
   }
 
-  _componentDidMount() {
-    this.componentDidMount();
+  _componentDidMount(props: P) {
+    this.componentDidMount(props);
   }
 
-  // Может переопределять пользователь, необязательно трогать
-  componentDidMount() {}
+  componentDidMount(props: P) {}
 
-  dispatchComponentDidMount() {
-    this.eventBus().emit(Block.EVENTS.FLOW_CDM);
-  }
-
-  _componentDidUpdate(oldProps: any, newProps: any) {
+  _componentDidUpdate(oldProps: P, newProps: P) {
     const response = this.componentDidUpdate(oldProps, newProps);
-    if (response) {
-      this.eventBus().emit(Block.EVENTS.FLOW_RENDER);
+    if (!response) {
+      return;
     }
+    this._render();
   }
 
-  // Может переопределять пользователь, необязательно трогать
-  componentDidUpdate(oldProps: any, newProps: any) {
+  componentDidUpdate(oldProps: P, newProps: P) {
     return true;
   }
 
-  setProps = (nextProps: any) => {
+  setProps = (nextProps: P) => {
     if (!nextProps) {
       return;
     }
+    console.log(nextProps);
 
-    Object.assign(this.props, nextProps);
+    Object.assign(this.props as any, nextProps);
   };
 
-  get element(): HTMLElement | null {
+  setState = (nextState: any) => {
+    if (!nextState) {
+      return;
+    }
+
+    Object.assign(this.state, nextState);
+  };
+
+  get element() {
     return this._element;
   }
 
   _render() {
-    const fragment = this.render();
-
-    const newElement = fragment.firstElementChild as HTMLElement;
-
-    if (this._element) {
-      this._removeEvents();
-      this._element.replaceWith(newElement);
-    }
-
-    this._element = newElement;
+    const fragment = this._compile();
 
     this._removeEvents();
+    const newElement = fragment.firstElementChild!;
 
-    this._addEvents();
+    this._element!.replaceWith(newElement);
+
+    this._element = newElement as HTMLElement;
+    const input = this._element.querySelector('input');
+
+    this._addEvents(input);
   }
 
-  // Может переопределять пользователь, необязательно трогать
-  protected render(): DocumentFragment {
-    return new DocumentFragment();
+  protected render(): string {
+    return '';
   }
 
-  getContent(): HTMLElement | null {
-    return this._element;
+  getContent(): HTMLElement {
+    // Хак, чтобы вызвать CDM только после добавления в DOM
+    if (this.element?.parentNode?.nodeType === Node.DOCUMENT_FRAGMENT_NODE) {
+      setTimeout(() => {
+        if (
+          this.element?.parentNode?.nodeType !== Node.DOCUMENT_FRAGMENT_NODE
+        ) {
+          this.eventBus().emit(Block.EVENTS.FLOW_CDM);
+        }
+      }, 100);
+    }
+
+    return this.element!;
   }
 
-  _makePropsProxy(props: any) {
+  _makePropsProxy(props: any): any {
     // Можно и так передать this
     // Такой способ больше не применяется с приходом ES6+
     const self = this;
+
     return new Proxy(props as unknown as object, {
       get(target: Record<string, unknown>, prop: string) {
         const value = target[prop];
@@ -149,78 +158,168 @@ class Block {
       set(target: Record<string, unknown>, prop: string, value: unknown) {
         const oldProps = { ...target };
         target[prop] = value;
+
+        // Запускаем обновление компоненты
+        // Плохой cloneDeep, в след итерации нужно заставлять добавлять cloneDeep им самим
         self.eventBus().emit(Block.EVENTS.FLOW_CDU, { ...oldProps }, target);
         return true;
       },
       deleteProperty() {
-        throw new Error('нет доступа');
+        throw new Error('Нет доступа');
       },
-    });
+    }) as unknown as P;
+  }
+
+  _createDocumentElement(tagName: string) {
+    return document.createElement(tagName);
   }
 
   _removeEvents() {
-    const { events } = this.props as any;
+    const events: Record<string, () => void> = (this.props as any).events;
 
     if (!events || !this._element) {
       return;
     }
 
     Object.entries(events).forEach(([event, listener]) => {
-      this._element.removeEventListener(event, listener);
+      this._element!.removeEventListener(event, listener);
     });
   }
 
-  _addEvents() {
+  _addEvents(input: HTMLElement | null) {
     const events: Record<string, () => void> = (this.props as any).events;
 
     if (!events) {
       return;
     }
 
-    Object.entries(events).forEach(([event, listener]) => {
-      this._element.addEventListener(event, listener);
-    });
+    if (input) {
+      Object.entries(events).forEach(([event, listener]) => {
+        input.addEventListener(event, listener);
+      });
+    } else {
+      Object.entries(events).forEach(([event, listener]) => {
+        this._element!.addEventListener(event, listener);
+      });
+    }
   }
 
-  _createDocumentElement(tagName) {
-    // Можно сделать метод, который через фрагменты в цикле создаёт сразу несколько блоков
-    return document.createElement(tagName);
-  }
+  _compile(): DocumentFragment {
+    const fragment = document.createElement('template');
 
-  compile(template: (context: any) => string, context: any) {
-    const fragment = this._createDocumentElement(
-      'template'
-    ) as HTMLTemplateElement;
-
-    Object.entries(this.children).forEach(([key, child]) => {
-      if (Array.isArray(child)) {
-        context[key] = child.map((ch) => `<div data-id="id-${ch.id}"></div>`);
-
-        return;
-      }
-
-      context[key] = `<div data-id="id-${child.id}"></div>`;
+    /**
+     * Рендерим шаблон
+     */
+    const template = Handlebars.compile(this.render());
+    fragment.innerHTML = template({
+      ...this.state,
+      ...this.props,
+      children: this.children,
+      refs: this.refs,
     });
 
-    const htmlString = template(context); // из шаблона получае html строку
-
-    fragment.innerHTML = htmlString;
-
-    Object.entries(this.children).forEach(([key, child]) => {
-      // TODO: сделать обаботку, если child это массив
-      const stub = fragment.content.querySelector(`[data-id="id-${child.id}"]`);
+    /**
+     * Заменяем заглушки на компоненты
+     */
+    Object.entries(this.children).forEach(([id, component]) => {
+      /**
+       * Ищем заглушку по id
+       */
+      const stub = fragment.content.querySelector(`[data-id="${id}"]`);
 
       if (!stub) {
         return;
       }
 
-      stub.replaceWith(child.getContent()!);
+      /**
+       * Заменяем заглушку на component._element
+       */
+      stub.replaceWith(component.getContent());
     });
 
+    /**
+     * Возвращаем фрагмент
+     */
     return fragment.content;
   }
 
-  protected initChildren() {}
-}
+  // show() {
+  //   this.getContent().style.display = 'block';
+  // }
 
-export default Block;
+  hideErrorMessage(inputElem: HTMLInputElement) {
+    const parentElem = inputElem.parentElement;
+    const errorElem = parentElem?.querySelector(
+      '#text-field-error'
+    ) as HTMLElement;
+    errorElem.style.visibility = 'hidden';
+
+    // this.getContent().style.display = 'none';
+  }
+
+  validateForm({ errorsState, inputName, inputValue }: ValidateForm) {
+    switch (inputName) {
+      case 'first_name':
+      case 'second_name':
+        if (!inputValue.match(/^[A-Z|А-Я]/)) {
+          errorsState[inputName] = 'Имя должно быть с заглавной буквы';
+        } else if (!inputValue.match(/^[(a-zA-Z)|(а-яА-Я)|-]+$/)) {
+          errorsState[inputName] = 'Только буквы или знак дефиса';
+        } else {
+          errorsState[inputName] = '';
+        }
+        break;
+      case 'login':
+        if (inputValue.length < 3 || inputValue.length > 20) {
+          errorsState[inputName] = 'От 3 до 20 символов';
+        } else if (!inputValue.match(/^[(a-zA-Z)|\d|\-|\_]+$/)) {
+          errorsState[inputName] =
+            'Латиница, цифры без пробелов, знаки - или _';
+        } else if (!inputValue.match(/[a-zA-Z]/)) {
+          errorsState[inputName] = 'Минимум одна латинская буква';
+        } else {
+          errorsState[inputName] = '';
+        }
+        break;
+      case 'email':
+        if (!inputValue.match(/^[(a-zA-Z)|\d|-|@|.]+$/)) {
+          errorsState[inputName] = 'Латиница, цифры без пробелов или дефис';
+        } else if (!inputValue.match(/(@\w+\.)/)) {
+          errorsState[inputName] = 'Email указан некорректно';
+        } else {
+          errorsState[inputName] = '';
+        }
+        break;
+      case 'password':
+      case 'password_confirm':
+        if (inputValue.length < 8 || inputValue.length > 40) {
+          errorsState[inputName] = 'От 8 до 40 символов';
+        } else if (!inputValue.match(/[A-Z]/)) {
+          errorsState[inputName] = 'Хотя бы одна заглаваня буква';
+        } else if (!inputValue.match(/\d/)) {
+          errorsState[inputName] = 'Хотя бы одна цифра';
+        } else {
+          errorsState[inputName] = '';
+        }
+        break;
+      case 'phone':
+        if (inputValue.length < 10 || inputValue.length > 15) {
+          errorsState[inputName] = 'От 10 до 15 символов';
+        } else if (!inputValue.match(/^(\+|\d)(\d+$)/)) {
+          errorsState[inputName] = 'Только цифры или первый +';
+        } else {
+          errorsState[inputName] = '';
+        }
+        break;
+      case 'message':
+        if (!inputValue) {
+          errorsState[inputName] = 'Введите сообщение';
+        } else {
+          errorsState[inputName] = '';
+        }
+        break;
+      default:
+        break;
+    }
+  }
+}
