@@ -144,8 +144,6 @@ export default class Block<P = any> {
   }
 
   _makePropsProxy(props: any): any {
-    // const self = this;
-
     return new Proxy(props as unknown as object, {
       get(target: Record<string, unknown>, prop: string) {
         const value = target[prop];
@@ -201,9 +199,6 @@ export default class Block<P = any> {
   _compile(): DocumentFragment {
     const fragment = document.createElement('template');
 
-    /**
-     * Рендерим шаблон
-     */
     const template = Handlebars.compile(this.render());
     fragment.innerHTML = template({
       ...this.state,
@@ -212,28 +207,16 @@ export default class Block<P = any> {
       refs: this.refs,
     });
 
-    /**
-     * Заменяем заглушки на компоненты
-     */
     Object.entries(this.children).forEach(([id, component]) => {
-      /**
-       * Ищем заглушку по id
-       */
       const stub = fragment.content.querySelector(`[data-id="${id}"]`);
 
       if (!stub) {
         return;
       }
 
-      /**
-       * Заменяем заглушку на component._element
-       */
       stub.replaceWith(component.getContent());
     });
 
-    /**
-     * Возвращаем фрагмент
-     */
     return fragment.content;
   }
 

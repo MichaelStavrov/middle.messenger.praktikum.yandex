@@ -25,24 +25,15 @@ export class Chats extends Block {
       },
       sendMessage: (e: SubmitEvent) => {
         e.preventDefault();
-        const formElements = e.composedPath() as HTMLElement[];
-        const form = formElements.find((elem) => elem.tagName === 'FORM');
-        const inputs = Array.from(
-          form?.querySelectorAll('input') ?? []
-        ) as HTMLElement[];
-        const textareas = Array.from(
-          form?.querySelectorAll('textarea') ?? []
-        ) as HTMLElement[];
-
-        [...inputs, ...textareas].forEach((input) => {
-          const inputName = input.getAttribute('name') ?? '';
-          const inputValue = input.getAttribute('value') ?? '';
-
-          this.state.values[inputName] = inputValue;
+        const texFields = Object.values(this.refs) as HTMLElement[];
+        texFields.forEach((field) => {
+          const input = field.firstElementChild as HTMLInputElement;
+          const { name, value } = input;
+          this.state.values[name] = value;
           this.validateForm({
             errorsState: this.state.errors,
-            inputName,
-            inputValue,
+            inputName: name,
+            inputValue: value,
           });
         });
 
@@ -128,6 +119,7 @@ export class Chats extends Block {
                 type="text"
                 placeholder="Сообщение"
                 name="message"
+                ref="message"
                 onFocus=onFocus
                 className="search"
               }}}

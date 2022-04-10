@@ -5,12 +5,12 @@ export class UpdateUserInfo extends Block {
   protected getStateFromProps() {
     this.state = {
       values: {
-        login: 'Login',
-        email: 'email@mail.ru',
-        first_name: 'First-name',
-        second_name: 'Second-name',
-        display_name: 'Display-name',
-        phone: '+123456789',
+        login: '',
+        email: '',
+        first_name: '',
+        second_name: '',
+        display_name: '',
+        phone: '',
       },
       errors: {
         login: '',
@@ -26,20 +26,15 @@ export class UpdateUserInfo extends Block {
       },
       onSave: (e: SubmitEvent) => {
         e.preventDefault();
-        const formElements = e.composedPath() as HTMLElement[];
-        const form = formElements.find((elem) => elem.tagName === 'FORM');
-        const inputs = Array.from(
-          form?.querySelectorAll('input') ?? []
-        ) as HTMLElement[];
-
-        inputs.forEach((input) => {
-          const inputName = input.getAttribute('name') ?? '';
-          const inputValue = input.getAttribute('value') ?? '';
-          this.state.values[inputName] = inputValue;
+        const texFields = Object.values(this.refs) as HTMLElement[];
+        texFields.forEach((field) => {
+          const input = field.querySelector('input') as HTMLInputElement;
+          const { name, value } = input;
+          this.state.values[name] = value;
           this.validateForm({
             errorsState: this.state.errors,
-            inputName,
-            inputValue,
+            inputName: name,
+            inputValue: value,
           });
         });
 
@@ -71,7 +66,9 @@ export class UpdateUserInfo extends Block {
               error="${errors.login}"
               name="login"
               label="Логин"
+              ref="login"
               type="text"
+              placeholder="old login"
               onFocus=onFocus
             }}}
             {{{TextField
@@ -80,6 +77,8 @@ export class UpdateUserInfo extends Block {
               name="email"
               label="Почта"
               type="text"
+              placeholder="old email"
+              ref="email"
               onFocus=onFocus
             }}}
             {{{TextField
@@ -88,6 +87,8 @@ export class UpdateUserInfo extends Block {
               name="first_name"
               label="Имя"
               type="text"
+              ref="first_name"
+              placeholder="old first_name"
               onFocus=onFocus
             }}}
             {{{TextField
@@ -95,6 +96,8 @@ export class UpdateUserInfo extends Block {
               error="${errors.second_name}"
               name="second_name"
               label="Фамилия"
+              ref="second_name"
+              placeholder="old second_name"
               type="text"
               onFocus=onFocus
             }}}
@@ -103,6 +106,8 @@ export class UpdateUserInfo extends Block {
               error="${errors.display_name}"
               name="display_name"
               label="Имя в чате"
+              ref="display_name"
+              placeholder="old display_name"
               type="text"
               onFocus=onFocus
             }}}
@@ -110,6 +115,8 @@ export class UpdateUserInfo extends Block {
               value="${values.phone}"
               error="${errors.phone}"
               name="phone"
+              ref="phone"
+              placeholder="old phone"
               label="Телефон"
               type="text"
               onFocus=onFocus

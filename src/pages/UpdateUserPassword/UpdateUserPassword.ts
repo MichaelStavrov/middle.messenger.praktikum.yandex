@@ -20,21 +20,15 @@ export class UpdateUserPassword extends Block {
       },
       onSave: (e: SubmitEvent) => {
         e.preventDefault();
-        const formElements = e.composedPath() as HTMLElement[];
-        const form = formElements.find((elem) => elem.tagName === 'FORM');
-        const inputs = Array.from(
-          form?.querySelectorAll('input') ?? []
-        ) as HTMLElement[];
-
-        inputs.forEach((input) => {
-          const inputName = input.getAttribute('name') ?? '';
-          const inputValue = input.getAttribute('value') ?? '';
-          this.state.values[inputName] = inputValue;
-
+        const texFields = Object.values(this.refs) as HTMLElement[];
+        texFields.forEach((field) => {
+          const input = field.firstElementChild as HTMLInputElement;
+          const { name, value } = input;
+          this.state.values[name] = value;
           this.validateForm({
             errorsState: this.state.errors,
-            inputName,
-            inputValue,
+            inputName: name,
+            inputValue: value,
           });
         });
 
@@ -66,6 +60,7 @@ export class UpdateUserPassword extends Block {
             error="${errors.password}"
             type="password"
             placeholder="Пароль"
+            ref="password"
             name="password"
             onFocus=onFocus
           }}}
@@ -73,6 +68,7 @@ export class UpdateUserPassword extends Block {
             value="${values.password_confirm}"
             error="${errors.password_confirm}"
             type="password"
+            ref="password_confirm"
             placeholder="Пароль (еще раз)"
             name="password_confirm"
             onFocus=onFocus

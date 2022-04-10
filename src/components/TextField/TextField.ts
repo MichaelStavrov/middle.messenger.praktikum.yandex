@@ -1,7 +1,6 @@
 import Block from '../../utils/Block';
 import { TextFieldProps } from './types';
 import './TextField.scss';
-
 export class TextField extends Block {
   constructor({
     onFocus,
@@ -85,7 +84,7 @@ export class TextField extends Block {
           {{#if id}} id={{id}} {{/if}} 
           type="{{type}}"
           placeholder="{{placeholder}}"
-          name={{name}}
+          name="{{name}}"
           autocomplete="off"
           value={{#if value}}
             "{{value}}"

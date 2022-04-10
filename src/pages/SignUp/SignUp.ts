@@ -28,21 +28,15 @@ export class SignUpPage extends Block {
       },
       onLogin: (e: SubmitEvent) => {
         e.preventDefault();
-        const formElements = e.composedPath() as HTMLElement[];
-        const form = formElements.find((elem) => elem.tagName === 'FORM');
-        const inputs = Array.from(
-          form?.querySelectorAll('input') ?? []
-        ) as HTMLElement[];
-
-        inputs.forEach((input) => {
-          const inputName = input.getAttribute('name') ?? '';
-          const inputValue = input.getAttribute('value') ?? '';
-          this.state.values[inputName] = inputValue;
-
+        const texFields = Object.values(this.refs) as HTMLElement[];
+        texFields.forEach((field) => {
+          const input = field.firstElementChild as HTMLInputElement;
+          const { name, value } = input;
+          this.state.values[name] = value;
           this.validateForm({
             errorsState: this.state.errors,
-            inputName,
-            inputValue,
+            inputName: name,
+            inputValue: value,
           });
         });
 
@@ -75,6 +69,7 @@ export class SignUpPage extends Block {
             value="${values.email}"
             type="text"
             placeholder="Email"
+            ref="email"
             name="email"
             onFocus=onFocus
           }}} 
@@ -83,6 +78,7 @@ export class SignUpPage extends Block {
             error="${errors.login}"
             type="text"
             placeholder="Логин"
+            ref="login"
             name="login"
             onFocus=onFocus
           }}}
@@ -92,6 +88,7 @@ export class SignUpPage extends Block {
             type="text"
             placeholder="Имя"
             name="first_name"
+            ref="first_name"
             onFocus=onFocus
           }}}
           {{{TextField
@@ -100,6 +97,7 @@ export class SignUpPage extends Block {
             type="text"
             placeholder="Фамилия"
             name="second_name"
+            ref="second_name"
             onFocus=onFocus
           }}}
           {{{TextField
@@ -107,6 +105,7 @@ export class SignUpPage extends Block {
             error="${errors.phone}"
             type="text"
             placeholder="Телефон"
+            ref="phone"
             name="phone"
             onFocus=onFocus
           }}}
@@ -116,6 +115,7 @@ export class SignUpPage extends Block {
             type="password"
             placeholder="Пароль"
             name="password"
+            ref="password"
             onFocus=onFocus
           }}}
           {{{TextField
@@ -124,6 +124,7 @@ export class SignUpPage extends Block {
             type="password"
             placeholder="Пароль (еще раз)"
             name="password_confirm"
+            ref="password_confirm"
             onFocus=onFocus
           }}}
           </fieldset>

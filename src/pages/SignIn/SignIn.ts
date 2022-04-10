@@ -18,20 +18,15 @@ export class SignInPage extends Block {
       },
       onLogin: (e: SubmitEvent) => {
         e.preventDefault();
-        const formElements = e.composedPath() as HTMLElement[];
-        const form = formElements.find((elem) => elem.tagName === 'FORM');
-        const inputs = Array.from(
-          form?.querySelectorAll('input') ?? []
-        ) as HTMLElement[];
-
-        inputs.forEach((input) => {
-          const inputName = input.getAttribute('name') ?? '';
-          const inputValue = input.getAttribute('value') ?? '';
-          this.state.values[inputName] = inputValue;
+        const texFields = Object.values(this.refs) as HTMLElement[];
+        texFields.forEach((field) => {
+          const input = field.firstElementChild as HTMLInputElement;
+          const { name, value } = input;
+          this.state.values[name] = value;
           this.validateForm({
             errorsState: this.state.errors,
-            inputName,
-            inputValue,
+            inputName: name,
+            inputValue: value,
           });
         });
 
@@ -65,6 +60,7 @@ export class SignInPage extends Block {
               name="login"
               type="text"
               placeholder="Логин"
+              ref="login"
               onFocus=onFocus
             }}}
             {{{TextField
@@ -73,6 +69,7 @@ export class SignInPage extends Block {
               name="password"
               type="password"
               placeholder="Пароль"
+              ref="password"
               onFocus=onFocus
             }}}
           </fieldset>
