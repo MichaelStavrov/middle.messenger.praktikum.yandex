@@ -2,6 +2,8 @@ import Block from '../../utils/Block';
 import { TextFieldProps } from './types';
 import './TextField.scss';
 export class TextField extends Block {
+  public static componentName = 'TextField';
+
   constructor({
     onFocus,
     type = 'text',

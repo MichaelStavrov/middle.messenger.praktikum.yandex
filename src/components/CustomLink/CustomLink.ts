@@ -3,6 +3,8 @@ import Block from '../../utils/Block';
 import './CustomLink.scss';
 
 export class CustomLink extends Block {
+  public static componentName = 'CustomLink';
+
   constructor({ onClick, ...rest }: CustomLinkProps) {
     super({ events: { click: onClick }, ...rest });
   }

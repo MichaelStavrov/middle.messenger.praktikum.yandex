@@ -3,6 +3,8 @@ import { ChatProps } from './types';
 import './Chat.scss';
 
 export class Chat extends Block {
+  public static componentName = 'Chat';
+
   constructor(props: ChatProps) {
     super(props);
   }

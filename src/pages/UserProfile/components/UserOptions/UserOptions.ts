@@ -3,6 +3,8 @@ import Block from '../../../../utils/Block';
 import './UserOptions.scss';
 
 export class UserOptions extends Block {
+  public static componentName = 'UserOptions';
+
   protected render(): string {
     return `
       <ul class="user-options-list">

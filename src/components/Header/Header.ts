@@ -2,6 +2,8 @@ import Block from '../../utils/Block';
 import './Header.scss';
 
 export class Header extends Block {
+  public static componentName = 'Header';
+
   protected render(): string {
     return `
     <nav>

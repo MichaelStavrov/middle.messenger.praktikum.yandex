@@ -3,6 +3,8 @@ import { UserAvatarProps } from './types';
 import './UserAvatar.scss';
 
 export class UserAvatar extends Block {
+  public static componentName = 'UserAvatar';
+
   constructor(props: UserAvatarProps) {
     super(props);
   }
