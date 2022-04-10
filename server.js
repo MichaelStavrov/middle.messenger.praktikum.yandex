@@ -10,4 +10,4 @@ app.get('*', (_, res) => {
   res.sendFile(path.join(__dirname, 'dist/index.html'));
 });
 
-app.listen(process.env.PORT ?? PORT);
+app.listen(process.env.PORT || PORT);
