@@ -8,12 +8,14 @@ export class TextField extends Block {
     type = 'text',
     value,
     error,
+    textarea,
     ...rest
   }: TextFieldProps) {
     super({
       type,
       error,
       value,
+      textarea,
       events: { focus: onFocus },
       ...rest,
     });
@@ -34,9 +36,6 @@ export class TextField extends Block {
         this.props.value = inputValue;
         this.state.value.value = inputValue;
 
-        if (this.props.value) {
-          this.state.value.value = this.props.value;
-        }
         this.state.name = inputName;
         this.validateForm({
           errorsState: this.state.error,
@@ -48,7 +47,6 @@ export class TextField extends Block {
           error: { ...this.state.error },
           value: { ...this.state.value },
         };
-
         this.setState(nextState);
       },
     };
@@ -58,6 +56,7 @@ export class TextField extends Block {
     Object.assign(this.props.events, {
       blur: this.state.onBlur,
     });
+
     return `
       <div class="text-field">
         {{#if label}}
@@ -68,7 +67,20 @@ export class TextField extends Block {
             {{label}}
           </label>
         {{/if}}
-        <input 
+        {{#if textarea}}
+          <textarea 
+            class="text-field-input textarea {{className}}"
+            {{#if id}} id={{id}} {{/if}}
+            placeholder="{{placeholder}}"
+            name={{name}}
+            value={{#if value}}"{{value}}"{{else}}${
+              this.state.value.value
+            }{{/if}}
+          >{{#if value}}{{value}}{{else}}${
+            this.state.value.value
+          }{{/if}}</textarea>
+        {{else}}
+          <input 
           class="text-field-input {{className}}"s
           {{#if id}} id={{id}} {{/if}} 
           type="{{type}}"
@@ -76,11 +88,12 @@ export class TextField extends Block {
           name={{name}}
           autocomplete="off"
           value={{#if value}}
-            {{value}}
+            "{{value}}"
             {{else}}
             "${this.state.value.value}"
-          {{/if}}
+        {{/if}}
         />
+        {{/if}}
         <div class="text-field-error" id="text-field-error">
         {{#if error}} 
           {{error}} 

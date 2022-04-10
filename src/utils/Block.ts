@@ -37,10 +37,6 @@ export default class Block<P = any> {
   public constructor(props?: P) {
     const eventBus = new EventBus<Events>();
 
-    // this._meta = {
-    //   props,
-    // };
-
     this.getStateFromProps(props);
 
     this.props = this._makePropsProxy(props || ({} as any));
@@ -77,7 +73,9 @@ export default class Block<P = any> {
     this.componentDidMount(props);
   }
 
-  componentDidMount(props: P) {}
+  componentDidMount(props: P) {
+    props;
+  }
 
   _componentDidUpdate(oldProps: P, newProps: P) {
     const response = this.componentDidUpdate(oldProps, newProps);
@@ -122,8 +120,9 @@ export default class Block<P = any> {
 
     this._element = newElement as HTMLElement;
     const input = this._element.querySelector('input');
+    const textarea = this._element.querySelector('textarea');
 
-    this._addEvents(input);
+    this._addEvents(input ?? textarea);
   }
 
   protected render(): string {
@@ -280,7 +279,6 @@ export default class Block<P = any> {
         }
         break;
       case 'password':
-      case 'password_confirm':
         if (inputValue.length < 8 || inputValue.length > 40) {
           errorsState[inputName] = 'От 8 до 40 символов';
         } else if (!inputValue.match(/[A-Z]/)) {

@@ -9,4 +9,5 @@ export interface TextFieldProps {
   className?: string;
   onFocus?: (e?: FocusEvent) => void;
   onBlur?: (e?: FocusEvent) => void;
+  textarea?: boolean;
 }

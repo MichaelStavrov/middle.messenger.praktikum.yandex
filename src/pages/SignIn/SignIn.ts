@@ -45,65 +45,7 @@ export class SignInPage extends Block {
         if (!Object.values(this.state.errors).some(Boolean)) {
           console.log(this.state.values);
         }
-        //   e.preventDefault();
-        //   const array = Array.from(e.composedPath()) as HTMLElement[];
-        //   const form = array.find((elem) => elem.nodeName === 'FORM');
-        //   const inputs = Array.from(
-        //     form?.querySelectorAll('input') ?? []
-        //   ) as HTMLElement[];
-        //   inputs.forEach((input) => {
-        //     const name = input.getAttribute('name');
-        //     const value = input.getAttribute('value');
-        //     this.validateForm({
-        //       errorsState: this.state.errors,
-        //       inputName: name ?? '',
-        //       inputValue: value ?? '',
-        //     });
-        //   });
-        //   const nextState = {
-        //     errors: { ...this.state.errors },
-        //     values: { ...this.state.values },
-        //   };
-        //   console.log(nextState.errors);
-        //   if (Object.values(nextState.values).every(Boolean)) {
-        //     console.log(nextState.values);
-        //   }
-        //   this.setState(nextState);
       },
-
-      // onLogin: () => {
-      //   const loginInput = this.refs.login.querySelector(
-      //     'input'
-      //   ) as HTMLInputElement;
-      //   const passwordInput = this.refs.password.querySelector(
-      //     'input'
-      //   ) as HTMLInputElement;
-
-      //   const loginData = {
-      //     login: loginInput.value,
-      //     password: passwordInput.value,
-      //   };
-
-      //   const nextState = {
-      //     errors: {
-      //       login: '',
-      //       password: '',
-      //     },
-      //     values: { ...loginData },
-      //   };
-
-      //   if (!loginData.login) {
-      //     nextState.errors.login = 'Login is required';
-      //   } else if (loginData.login.length < 4) {
-      //     nextState.errors.login = 'Login should contain more than 3 chars';
-      //   }
-
-      //   if (!loginData.password) {
-      //     nextState.errors.password = 'Password is required';
-      //   }
-
-      //   this.setState(nextState);
-      // },
     };
   }
 
@@ -125,7 +67,6 @@ export class SignInPage extends Block {
               placeholder="Логин"
               onFocus=onFocus
             }}}
-
             {{{TextField
               value="${values.password}"
               error="${errors.password}"

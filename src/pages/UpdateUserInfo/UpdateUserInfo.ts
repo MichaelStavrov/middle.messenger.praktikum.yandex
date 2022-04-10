@@ -5,19 +5,60 @@ export class UpdateUserInfo extends Block {
   protected getStateFromProps() {
     this.state = {
       values: {
-        login: 'login',
-        email: 'email',
-        name: 'name',
-        secondName: 'secondName',
-        pseudonym: 'pseudonym',
-        phone: 'phone',
+        login: 'Login',
+        email: 'email@mail.ru',
+        first_name: 'First-name',
+        second_name: 'Second-name',
+        display_name: 'Display-name',
+        phone: '+123456789',
       },
-      // onSave: () => {},
+      errors: {
+        login: '',
+        email: '',
+        first_name: '',
+        second_name: '',
+        display_name: '',
+        phone: '',
+      },
+      onFocus: (e: FocusEvent) => {
+        const inputElement = e.target as HTMLInputElement;
+        this.hideErrorMessage(inputElement);
+      },
+      onSave: (e: SubmitEvent) => {
+        e.preventDefault();
+        const formElements = e.composedPath() as HTMLElement[];
+        const form = formElements.find((elem) => elem.tagName === 'FORM');
+        const inputs = Array.from(
+          form?.querySelectorAll('input') ?? []
+        ) as HTMLElement[];
+
+        inputs.forEach((input) => {
+          const inputName = input.getAttribute('name') ?? '';
+          const inputValue = input.getAttribute('value') ?? '';
+          this.state.values[inputName] = inputValue;
+          this.validateForm({
+            errorsState: this.state.errors,
+            inputName,
+            inputValue,
+          });
+        });
+
+        const nextState = {
+          errors: { ...this.state.errors },
+          values: { ...this.state.values },
+        };
+
+        this.setState(nextState);
+
+        if (!Object.values(this.state.errors).some(Boolean)) {
+          console.log(this.state.values);
+        }
+      },
     };
   }
 
   render() {
-    const { values } = this.state;
+    const { values, errors } = this.state;
     return `
       <div class="update-user-info-content">
         <form class="update-user-info-form">
@@ -27,39 +68,51 @@ export class UpdateUserInfo extends Block {
           <fieldset class="update-user-info-fieldset">
             {{{TextField
               value="${values.login}"
+              error="${errors.login}"
+              name="login"
               label="Логин"
-              id="update-login"
               type="text"
+              onFocus=onFocus
             }}}
             {{{TextField
               value="${values.email}"
+              error="${errors.email}"
+              name="email"
               label="Почта"
-              id="update-email" 
               type="text"
+              onFocus=onFocus
             }}}
             {{{TextField
-              value="${values.name}"
+              value="${values.first_name}"
+              error="${errors.first_name}"
+              name="first_name"
               label="Имя"
-              id="update-name" 
               type="text"
+              onFocus=onFocus
             }}}
             {{{TextField
-              value="${values.secondName}"
+              value="${values.second_name}"
+              error="${errors.second_name}"
+              name="second_name"
               label="Фамилия"
-              id="update-second-name" 
               type="text"
+              onFocus=onFocus
             }}}
             {{{TextField
-              value="${values.pseudonym}"
+              value="${values.display_name}"
+              error="${errors.display_name}"
+              name="display_name"
               label="Имя в чате"
-              id="update-pseudonym" 
               type="text"
+              onFocus=onFocus
             }}}
             {{{TextField
               value="${values.phone}"
+              error="${errors.phone}"
+              name="phone"
               label="Телефон"
-              id="update-phone" 
               type="text"
+              onFocus=onFocus
             }}}
           </fieldset>
           <div class="update-user-info-contolr">

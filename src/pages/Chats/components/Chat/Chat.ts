@@ -11,7 +11,6 @@ export class Chat extends Block {
     return `
       <div class="chat">
         <div class="chat-avatar">
-          
         </div>
         <div class="chat-content">
           <div class="chat-content-top">

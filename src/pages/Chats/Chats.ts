@@ -18,34 +18,11 @@ export class Chats extends Block {
       errors: {
         message: '',
       },
-
+      messages: ['message'],
       onFocus: (e: FocusEvent) => {
         const inputElement = e.target as HTMLInputElement;
         this.hideErrorMessage(inputElement);
       },
-      // onBlur: (e: FocusEvent) => {
-      //   const inputName = (e.target as HTMLInputElement).name;
-      //   const inputValue = (e.target as HTMLInputElement).value;
-
-      //   this.validateForm({
-      //     errorsState: this.state.errors,
-      //     inputName,
-      //     inputValue,
-      //   });
-
-      //   this.state.values[inputName] = inputValue;
-      //   const nextState = {
-      //     errors: { ...this.state.errors },
-      //     values: { ...this.state.values },
-      //   };
-
-      //   this.setState(nextState);
-      // },
-
-      // onChange(e: Event) {
-      //   const targetValue = (e.target as HTMLInputElement).value;
-      //   console.log(targetValue);
-      // },
       sendMessage: (e: SubmitEvent) => {
         e.preventDefault();
         const formElements = e.composedPath() as HTMLElement[];
@@ -53,10 +30,14 @@ export class Chats extends Block {
         const inputs = Array.from(
           form?.querySelectorAll('input') ?? []
         ) as HTMLElement[];
+        const textareas = Array.from(
+          form?.querySelectorAll('textarea') ?? []
+        ) as HTMLElement[];
 
-        inputs.forEach((input) => {
+        [...inputs, ...textareas].forEach((input) => {
           const inputName = input.getAttribute('name') ?? '';
           const inputValue = input.getAttribute('value') ?? '';
+
           this.state.values[inputName] = inputValue;
           this.validateForm({
             errorsState: this.state.errors,
@@ -65,44 +46,21 @@ export class Chats extends Block {
           });
         });
 
+        if (this.state.values.message) {
+          this.state.messages.push(this.state.values.message);
+        }
+
         const nextState = {
           errors: { ...this.state.errors },
           values: { ...this.state.values },
         };
-
         this.setState(nextState);
 
-        if (!Object.values(this.state.errors).some(Boolean)) {
-          console.log(this.state.values);
-        }
-
-        // console.log((e.target as HTMLElement).parentElement);
-
-        // const array = Array.from(e.composedPath()) as HTMLElement[];
-
-        // const form = array.find((elem) => elem.nodeName === 'FORM');
-        // const inputs = Array.from(
-        //   form?.querySelectorAll('input') ?? []
-        // ) as HTMLElement[];
-        // inputs.forEach((input) => {
-        //   const name = input.getAttribute('name');
-        //   const value = input.getAttribute('value');
-
-        // this.validateForm({
-        //   errorsState: this.state.errors,
-        //   inputName: name ?? '',
-        //   inputValue: value ?? '',
-        // });
-        // });
-        // const nextState = {
-        //   errors: { ...this.state.errors },
-        //   values: { ...this.state.values },
-        // };
-        // if (!Object.values(nextState.errors).some(Boolean)) {
-        //   console.log(nextState.values);
-        // }
-
-        // this.setState(nextState);
+        this.state.values.message = '';
+        this.setState({
+          errors: { ...this.state.errors },
+          values: { ...this.state.values },
+        });
       },
     };
   }
@@ -150,22 +108,29 @@ export class Chats extends Block {
               <img src="${dots}"/>
             </div>
           </div>
-          <div class="corresp-main"></div>
+          <div class="corresp-main">
+            <ul class="message-list">
+              {{#each messages}}
+                <li class="message-list-item">{{this}}</li>
+              {{/each}}
+            </ul>
+          </div>
           <div class="corresp-footer">
             <div class="corresp-footer-options">
               <img src="${clip}"/>
             </div>
             <form class="corresp-textarea">
               <div class="corresp-textfield">
-                {{{TextField
-                  error="${errors.message}"
-                  value="${values.message}"
-                  type="text"
-                  placeholder="Сообщение"
-                  name="message"
-                  onFocus=onFocus
-                  className="search"
-                }}}
+              {{{TextField
+                textarea="true"
+                error="${errors.message}"
+                value="${values.message}"
+                type="text"
+                placeholder="Сообщение"
+                name="message"
+                onFocus=onFocus
+                className="search"
+              }}}
               </div>
               <div class="corresp-submit-button-container">
                 {{{Button
