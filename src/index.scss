@@ -1,0 +1,121 @@
+:root {
+  --primary: #026;
+  --background: #d9e4f0;
+  --background-white: #f0f2f5;
+  --clr-font: #282c35;
+  --active: #007fff;
+  --active-dark: #0058b2;
+  --light-gray: #cbd2dd;
+  --light-blue: #e4edfd;
+  --dark-gray: rgb(48 69 79 / 28%);
+  --disabled: #ececee;
+  --highlight: #fdf4d4;
+  --dark-shadow: rgb(0 0 0 / 46%);
+  --success: rgb(52 197 165);
+  --normal-gray: #999;
+  --danger: #e00505;
+  --base-shadow: 0 0 6px rgb(0 0 0 / 14%);
+  --base-transition: all 0.2s ease-in-out;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: var(--background);
+  color: var(--clr-font);
+  font-size: 16px;
+  font-family:
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    Roboto,
+    Oxygen,
+    Ubuntu,
+    Cantarell,
+    "Fira Sans",
+    "Droid Sans",
+    "Helvetica Neue",
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  scrollbar-width: thin;
+  scrollbar-color: var(--light-gray) transparent;
+
+  &::-webkit-scrollbar {
+    width: 10px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background-color: var(--light-gray);
+  }
+}
+
+code {
+  font-family:
+    source-code-pro,
+    Menlo,
+    Monaco,
+    Consolas,
+    "Courier New",
+    monospace;
+}
+
+ul,
+li {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+p,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  margin: 0;
+  font-size: inherit;
+}
+
+button {
+  margin: 0;
+  padding: 0;
+  outline: none;
+  border: none;
+  cursor: pointer;
+  background-color: inherit;
+  color: inherit;
+  box-shadow: var(--base-shadow);
+  font-family: inherit;
+}
+
+input {
+  padding: 8px 16px;
+  outline: none;
+  border: none;
+  box-shadow: var(--base-shadow);
+  border-radius: 8px;
+}
+
+fieldset {
+  margin: 0;
+  padding: 0;
+  border: none;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+.page-container {
+  max-width: 1280px;
+  width: 100%;
+  margin: 0 auto;
+}

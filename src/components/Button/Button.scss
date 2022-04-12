@@ -6,7 +6,7 @@
   transition: var(--base-transition);
 
   &:hover {
-    background-color: var(--activeDark);
+    background-color: var(--active-dark);
   }
 }
 
@@ -14,4 +14,14 @@
   color: var(--danger);
   box-shadow: none;
   font-size: 16px;
+}
+
+.submit-message {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  border-radius: 50%;
+  padding: 0;
 }

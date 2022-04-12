@@ -1,0 +1,131 @@
+.chats-container {
+  width: 80%;
+  height: 80%;
+  margin: 10px auto;
+  display: flex;
+  background-color: white;
+  border-radius: 8px;
+}
+
+.chats {
+  width: 310px;
+  padding: 24px 8px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border-right: 1px solid var(--light-gray);
+}
+
+.chats-link-to-profile {
+  margin-bottom: 24px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  align-self: flex-end;
+  font-size: 12px;
+  color: var(--normal-gray);
+}
+
+.chats-arrow-icon {
+  margin-bottom: -2px;
+}
+
+.chats-search-field {
+  width: 100%;
+  margin-bottom: 16px;
+}
+
+.corresp {
+  width: 100%;
+  padding: 8px 16px 24px;
+  display: flex;
+  flex-direction: column;
+}
+
+.corresp-header {
+  padding-bottom: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.corresp-main {
+  overflow-y: auto;
+  padding: 24px 0;
+  border-top: 1px solid var(--light-gray);
+  border-bottom: 1px solid var(--light-gray);
+  flex-grow: 1;
+}
+
+.message-list {
+  width: 100%;
+  max-width: 100%;
+  height: 440px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+.message-list-item {
+  max-width: 88%;
+  width: fit-content;
+  padding: 8px;
+  background-color: var(--light-blue);
+  border-radius: 8px 8px 0;
+  word-break: break-all;
+}
+
+.corresp-companion-info {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.corresp-companion-avatar {
+  border-radius: 50%;
+  background-color: var(--normal-gray);
+  width: 34px;
+  height: 34px;
+}
+
+.corresp-companion-title {
+  font-weight: 700;
+}
+
+.corresp-footer {
+  padding-top: 8px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.corresp-textarea {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  width: 100%;
+  margin-bottom: 0;
+}
+
+.corresp-textfield {
+  width: 100%;
+  margin-bottom: -14px;
+}
+
+.corresp-submit-button-container {
+  position: relative;
+}
+
+.corresp-footer-send {
+  box-shadow: none;
+}
+
+.corresp-footer-send-icon {
+  transform: rotate(180deg);
+  pointer-events: none;
+  z-index: 1;
+}

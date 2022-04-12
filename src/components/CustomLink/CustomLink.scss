@@ -4,15 +4,19 @@
   transition: var(--base-transition);
 
   &:hover {
-    color: var(--activeDark);
+    color: var(--active-dark);
   }
 }
 
 .active-link {
-  color: var(--activeDark);
+  color: var(--active-dark);
   text-decoration: underline;
 }
 
 .danger {
   color: var(--danger);
+}
+
+.gray {
+  color: var(--normal-gray);
 }
