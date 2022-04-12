@@ -1,4 +1,5 @@
 import Block from '../../utils/Block';
+import validateForm from '../../utils/validateForm';
 import './UpdateUserInfo.scss';
 
 export class UpdateUserInfo extends Block {
@@ -31,7 +32,7 @@ export class UpdateUserInfo extends Block {
           const input = field.querySelector('input') as HTMLInputElement;
           const { name, value } = input;
           this.state.values[name] = value;
-          this.validateForm({
+          validateForm({
             errorsState: this.state.errors,
             inputName: name,
             inputValue: value,

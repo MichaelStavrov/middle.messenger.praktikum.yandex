@@ -1,8 +1,9 @@
-import { CustomLinkProps } from './types';
 import Block from '../../utils/Block';
+import { CustomLinkProps } from './types';
+import { EventsProps } from '../../types';
 import './CustomLink.scss';
 
-export class CustomLink extends Block {
+export class CustomLink extends Block<CustomLinkProps & EventsProps> {
   public static componentName = 'CustomLink';
 
   constructor({ onClick, ...rest }: CustomLinkProps) {

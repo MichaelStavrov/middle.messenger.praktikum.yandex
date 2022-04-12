@@ -1,5 +1,6 @@
 import Chat from './components/Chat';
 import Block from '../../utils/Block';
+import validateForm from '../../utils/validateForm';
 import { registerComponent } from '../../utils';
 import arrowRight from '../../assets/arrow-right.svg';
 import arrowBack from '../../assets/arrow-back.svg';
@@ -30,7 +31,7 @@ export class Chats extends Block {
           const input = field.firstElementChild as HTMLInputElement;
           const { name, value } = input;
           this.state.values[name] = value;
-          this.validateForm({
+          validateForm({
             errorsState: this.state.errors,
             inputName: name,
             inputValue: value,
@@ -126,7 +127,7 @@ export class Chats extends Block {
               </div>
               <div class="corresp-submit-button-container">
                 {{{Button
-                  className="submit-message "
+                  className="submit-message"
                   onClick=sendMessage
                 }}}
                 <img

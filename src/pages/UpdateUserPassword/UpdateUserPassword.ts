@@ -1,4 +1,5 @@
 import Block from '../../utils/Block';
+import validateForm from '../../utils/validateForm';
 import './UpdateUserPassword.scss';
 
 export class UpdateUserPassword extends Block {
@@ -25,7 +26,7 @@ export class UpdateUserPassword extends Block {
           const input = field.firstElementChild as HTMLInputElement;
           const { name, value } = input;
           this.state.values[name] = value;
-          this.validateForm({
+          validateForm({
             errorsState: this.state.errors,
             inputName: name,
             inputValue: value,
@@ -55,25 +56,24 @@ export class UpdateUserPassword extends Block {
             Изменение пароля
           </h1>
           <fieldset class="update-user-password-fieldset">
-          {{{TextField
-            value="${values.password}"
-            error="${errors.password}"
-            type="password"
-            placeholder="Пароль"
-            ref="password"
-            name="password"
-            onFocus=onFocus
-          }}}
-          {{{TextField
-            value="${values.password_confirm}"
-            error="${errors.password_confirm}"
-            type="password"
-            ref="password_confirm"
-            placeholder="Пароль (еще раз)"
-            name="password_confirm"
-            onFocus=onFocus
-          }}}
-            
+            {{{TextField
+              value="${values.password}"
+              error="${errors.password}"
+              type="password"
+              placeholder="Пароль"
+              ref="password"
+              name="password"
+              onFocus=onFocus
+            }}}
+            {{{TextField
+              value="${values.password_confirm}"
+              error="${errors.password_confirm}"
+              type="password"
+              ref="password_confirm"
+              placeholder="Пароль (еще раз)"
+              name="password_confirm"
+              onFocus=onFocus
+            }}}
             {{{TextField
               value="${values.newPassword}"
               error="${errors.newPassword}"
@@ -82,13 +82,12 @@ export class UpdateUserPassword extends Block {
               name="newPassword"
               onFocus=onFocus
             }}}
-            
             <div class="update-user-password-contolr">
-            {{{Button
-              text="Сохранить"
-              onClick=onSave
-            }}}
-          </div>
+              {{{Button
+                text="Сохранить"
+                onClick=onSave
+              }}}
+            </div>
           </div>
         </form>
       </div>

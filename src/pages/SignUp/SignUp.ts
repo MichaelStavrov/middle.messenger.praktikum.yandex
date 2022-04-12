@@ -1,5 +1,7 @@
 import Block from '../../utils/Block';
+import validateForm from '../../utils/validateForm';
 import './SignUp.scss';
+
 export class SignUpPage extends Block {
   protected getStateFromProps() {
     this.state = {
@@ -33,7 +35,7 @@ export class SignUpPage extends Block {
           const input = field.firstElementChild as HTMLInputElement;
           const { name, value } = input;
           this.state.values[name] = value;
-          this.validateForm({
+          validateForm({
             errorsState: this.state.errors,
             inputName: name,
             inputValue: value,

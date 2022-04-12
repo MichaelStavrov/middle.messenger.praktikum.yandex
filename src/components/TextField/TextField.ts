@@ -1,7 +1,10 @@
 import Block from '../../utils/Block';
+import validateForm from '../../utils/validateForm';
 import { TextFieldProps } from './types';
+import { EventsProps } from '../../types';
 import './TextField.scss';
-export class TextField extends Block {
+
+export class TextField extends Block<TextFieldProps & EventsProps> {
   public static componentName = 'TextField';
 
   constructor({
@@ -26,7 +29,7 @@ export class TextField extends Block {
     this.state = {
       name: '',
       error: {},
-      value: {
+      values: {
         value: '',
       },
 
@@ -35,10 +38,10 @@ export class TextField extends Block {
         const inputValue = (e.target as HTMLInputElement).value;
 
         this.props.value = inputValue;
-        this.state.value.value = inputValue;
+        this.state.values.value = inputValue;
 
         this.state.name = inputName;
-        this.validateForm({
+        validateForm({
           errorsState: this.state.error,
           inputName,
           inputValue,
@@ -46,7 +49,7 @@ export class TextField extends Block {
         this.props.error = this.state.error[inputName];
         const nextState = {
           error: { ...this.state.error },
-          value: { ...this.state.value },
+          value: { ...this.state.values },
         };
         this.setState(nextState);
       },
@@ -75,10 +78,10 @@ export class TextField extends Block {
             placeholder="{{placeholder}}"
             name={{name}}
             value={{#if value}}"{{value}}"{{else}}${
-              this.state.value.value
+              this.state.values.value
             }{{/if}}
           >{{#if value}}{{value}}{{else}}${
-            this.state.value.value
+            this.state.values.value
           }{{/if}}</textarea>
         {{else}}
           <input 
@@ -91,7 +94,7 @@ export class TextField extends Block {
           value={{#if value}}
             "{{value}}"
             {{else}}
-            "${this.state.value.value}"
+            "${this.state.values.value}"
         {{/if}}
         />
         {{/if}}

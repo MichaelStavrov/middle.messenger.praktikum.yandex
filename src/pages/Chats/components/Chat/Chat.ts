@@ -2,7 +2,7 @@ import Block from '../../../../utils/Block';
 import { ChatProps } from './types';
 import './Chat.scss';
 
-export class Chat extends Block {
+export class Chat extends Block<ChatProps> {
   public static componentName = 'Chat';
 
   constructor(props: ChatProps) {
