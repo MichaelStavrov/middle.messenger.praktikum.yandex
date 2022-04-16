@@ -1,29 +1,15 @@
 import Block from './Block';
-import Button from '../components/Button';
-import CustomLink from '../components/CustomLink';
-import TextField from '../components/TextField';
-import registerComponent from './registerComponent';
-import routing from './routing';
 
-registerComponent(Button);
-registerComponent(TextField);
-registerComponent(CustomLink);
+let root: HTMLElement | null = null;
 
-export default function renderDOM(BlockPage: typeof Block) {
-  const block = new BlockPage();
-  const root = document.querySelector('#root');
-
+export default function renderDOM(block: Block) {
   if (root) {
-    root.innerHTML = '';
-    root.appendChild(block.getContent());
+    const main = document.querySelector('#main-content');
+    main!.appendChild(block.getContent());
+    return;
   }
 
-  const CurrentPage = routing(window.location.pathname);
-  const page = new CurrentPage();
+  root = document.querySelector('#root');
 
-  const main = document.querySelector('#main-content');
-  if (main) {
-    main.innerHTML = '';
-    main.appendChild(page.getContent());
-  }
+  root!.appendChild(block.getContent());
 }

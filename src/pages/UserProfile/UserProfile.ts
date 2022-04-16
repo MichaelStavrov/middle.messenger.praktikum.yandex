@@ -3,7 +3,6 @@ import UserAvatar from './components/UserAvatar';
 import UserOptions from './components/UserOptions';
 import { registerComponent } from '../../utils';
 import avatar from '../../assets/dan_abramov.jpeg';
-import arrowBack from '../../assets/arrow-back.svg';
 import './UserProfile.scss';
 
 registerComponent(UserAvatar);
@@ -27,9 +26,11 @@ export class UserProfile extends Block {
     return `
       <div class="user-profile">
         <div class="user-profile-container">
-          <a class="user-profile-link-to-back" href="/">
-            <img class="user-profile-icon-back" src=${arrowBack} alt="вернуться назад"/>
-          </a>
+          {{{CustomLink
+            text="Назад к чатам"
+            href="/chats"
+            className="user-profile-icon-back"
+          }}}
           {{{UserAvatar
             image="${avatar}"
             alt="Аватарка"

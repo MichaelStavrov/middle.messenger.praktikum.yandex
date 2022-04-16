@@ -6,8 +6,19 @@ import './CustomLink.scss';
 export class CustomLink extends Block<CustomLinkProps & EventsProps> {
   public static componentName = 'CustomLink';
 
-  constructor({ onClick, ...rest }: CustomLinkProps) {
-    super({ events: { click: onClick }, ...rest });
+  constructor({ onClick, href, ...rest }: CustomLinkProps) {
+    super({ events: { click: onClick }, href, ...rest });
+    this.setProps({
+      href,
+      events: {
+        ...this.props.events,
+        click: (e) => {
+          e.preventDefault();
+          window.router.go(href);
+        },
+      },
+    });
+    console.log(this.props);
   }
 
   protected render(): string {

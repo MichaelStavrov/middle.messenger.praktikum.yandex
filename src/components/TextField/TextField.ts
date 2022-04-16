@@ -23,6 +23,13 @@ export class TextField extends Block<TextFieldProps & EventsProps> {
       events: { focus: onFocus },
       ...rest,
     });
+
+    this.setProps({
+      events: {
+        ...this.props.events,
+        blur: this.state.onBlur,
+      },
+    });
   }
 
   protected getStateFromProps() {
@@ -57,10 +64,6 @@ export class TextField extends Block<TextFieldProps & EventsProps> {
   }
 
   protected render(): string {
-    Object.assign(this.props.events, {
-      blur: this.state.onBlur,
-    });
-
     return `
       <div class="text-field">
         {{#if label}}
