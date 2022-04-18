@@ -67,6 +67,9 @@ export default class Block<P = any> {
   }
 
   _componentDidUpdate(oldProps: P, newProps: P) {
+    // if (this._element && this._element.style.display === 'none') {
+    //   return;
+    // }
     const response = this.componentDidUpdate(oldProps, newProps);
     if (!response) {
       return;

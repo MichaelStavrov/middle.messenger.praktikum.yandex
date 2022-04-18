@@ -18,7 +18,6 @@ export class CustomLink extends Block<CustomLinkProps & EventsProps> {
         },
       },
     });
-    console.log(this.props);
   }
 
   protected render(): string {

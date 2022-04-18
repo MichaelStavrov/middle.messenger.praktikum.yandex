@@ -14,7 +14,7 @@ export class NotFoundPage extends Block {
           </p>
           {{{CustomLink
             text="Назад к чатам"
-            href="/"
+            href="/chats"
           }}}
         </div>
       </div>
