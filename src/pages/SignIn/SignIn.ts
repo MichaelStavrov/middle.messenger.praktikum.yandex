@@ -1,8 +1,28 @@
 import Block from '../../utils/Block';
 import validateForm from '../../utils/validateForm';
+import { withRouter } from '../../utils/withRouter';
+import { withStore } from '../../utils/withStore';
+import { SignInPageProps } from './types';
 import './SignIn.scss';
+import { getUser, sendLoginData } from '../../services/auth';
 
-export class SignInPage extends Block {
+class SignInPage extends Block<SignInPageProps> {
+  constructor(props: SignInPageProps) {
+    super(props);
+
+    this.setProps({
+      formError: () => this.props.store.getState().loginFormError,
+    });
+
+    this.props.store.dispatch(getUser);
+  }
+
+  componentDidMount(): void {
+    if (this.props.store.getState().user?.secondName) {
+      this.props.router.go('/chats');
+    }
+  }
+
   protected getStateFromProps() {
     this.state = {
       values: {
@@ -19,6 +39,7 @@ export class SignInPage extends Block {
       },
       onLogin: (e: SubmitEvent) => {
         e.preventDefault();
+
         const texFields = Object.values(this.refs) as HTMLElement[];
         texFields.forEach((field) => {
           const input = field.firstElementChild as HTMLInputElement;
@@ -39,7 +60,7 @@ export class SignInPage extends Block {
         this.setState(nextState);
 
         if (!Object.values(this.state.errors).some(Boolean)) {
-          console.log(this.state.values);
+          this.props.store.dispatch(sendLoginData, this.state.values);
         }
       },
     };
@@ -73,6 +94,7 @@ export class SignInPage extends Block {
               ref="password"
               onFocus=onFocus
             }}}
+            {{{ErrorComponent value=formError}}}
           </fieldset>
           <div class="login-form-contolrs">
             {{{Button
@@ -87,6 +109,9 @@ export class SignInPage extends Block {
           </div>
         </form>
       </div>
+
     `;
   }
 }
+
+export default withRouter(withStore(SignInPage));

@@ -1,8 +1,28 @@
+import { changePassword } from '../../services/user';
 import Block from '../../utils/Block';
+import { BrowserRouter } from '../../utils/BrowserRouter';
+import { Store } from '../../utils/Store';
 import validateForm from '../../utils/validateForm';
+import { withRouter } from '../../utils/withRouter';
+import { withStore } from '../../utils/withStore';
 import './UpdateUserPassword.scss';
 
-export class UpdateUserPassword extends Block {
+interface UpdateUserPasswordProps {
+  router: BrowserRouter;
+  store: Store<AppState>;
+  changePasswordError: () => string | null;
+}
+export class UpdateUserPassword extends Block<UpdateUserPasswordProps> {
+  public static componentName = 'UpdateUserPassword';
+
+  constructor(props: UpdateUserPasswordProps) {
+    super(props);
+
+    this.setProps({
+      changePasswordError: () =>
+        this.props.store.getState().changePasswordError,
+    });
+  }
   protected getStateFromProps() {
     this.state = {
       values: {
@@ -38,10 +58,21 @@ export class UpdateUserPassword extends Block {
           values: { ...this.state.values },
         };
 
+        const { newPassword, password_confirm } = this.state.values;
+        if (newPassword !== password_confirm) {
+          this.setProps({
+            changePasswordError: () => 'Пароли должны совпадать',
+          });
+          return;
+        }
+
         this.setState(nextState);
 
         if (!Object.values(this.state.errors).some(Boolean)) {
-          console.log(this.state.values);
+          this.props.store.dispatch(changePassword, {
+            oldPassword: this.state.values.password,
+            newPassword: this.state.values.newPassword,
+          });
         }
       },
     };
@@ -66,6 +97,15 @@ export class UpdateUserPassword extends Block {
               onFocus=onFocus
             }}}
             {{{TextField
+              value="${values.newPassword}"
+              error="${errors.newPassword}"
+              ref="newPassword"
+              type="password"
+              placeholder="Новый пароль" 
+              name="newPassword"
+              onFocus=onFocus
+            }}}
+            {{{TextField
               value="${values.password_confirm}"
               error="${errors.password_confirm}"
               type="password"
@@ -74,16 +114,10 @@ export class UpdateUserPassword extends Block {
               name="password_confirm"
               onFocus=onFocus
             }}}
-            {{{TextField
-              value="${values.newPassword}"
-              error="${errors.newPassword}"
-              type="password"
-              placeholder="Новый пароль" 
-              name="newPassword"
-              onFocus=onFocus
-            }}}
+            {{{ErrorComponent value=changePasswordError}}}
             <div class="update-user-password-contolr">
               {{{Button
+                type="submit"
                 text="Сохранить"
                 onClick=onSave
               }}}
@@ -94,3 +128,5 @@ export class UpdateUserPassword extends Block {
     `;
   }
 }
+
+export default withRouter(withStore(UpdateUserPassword));

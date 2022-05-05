@@ -3,8 +3,8 @@ type Indexed<T = object> = {
 };
 
 function merge(lhs: Indexed, rhs: Indexed): Indexed {
-  for (let p in rhs) {
-    if (!rhs.hasOwnProperty(p)) {
+  for (const p in rhs) {
+    if (!Object.prototype.hasOwnProperty.call(rhs, p)) {
       continue;
     }
 

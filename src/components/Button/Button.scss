@@ -11,12 +11,19 @@
 }
 
 .link-view-button {
-  color: var(--danger);
+  padding: 0;
+  background-color: inherit;
+  color: var(--active);
   box-shadow: none;
-  font-size: 16px;
+
+  &:hover {
+    background-color: inherit;
+    color: var(--active-dark);
+  }
 }
 
 .submit-message {
+  width: 100%;
   position: absolute;
   top: 0;
   left: 0;
@@ -24,4 +31,22 @@
   bottom: 0;
   border-radius: 50%;
   padding: 0;
+}
+
+.warning {
+  background-color: var(--danger);
+
+  &:hover {
+    background-color: var(--darken-danger);
+  }
+}
+
+.transparent {
+  background-color: transparent;
+  padding: 0;
+  box-shadow: none;
+
+  &:hover {
+    background-color: transparent;
+  }
 }

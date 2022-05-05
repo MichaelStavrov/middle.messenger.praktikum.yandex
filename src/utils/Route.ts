@@ -24,23 +24,14 @@ export class Route {
     }
   }
 
-  leave() {
-    if (this._block) {
-      this._block.hide();
-    }
-  }
-
   match(pathname: string) {
     return isEqual(pathname, this._pathname);
   }
 
   render() {
-    if (!this._block) {
-      this._block = new this._blockClass(this._props);
-      renderDOM(this._block);
-      return;
-    }
+    this._block = new this._blockClass(this._props);
 
-    this._block.show();
+    renderDOM(this._block);
+    return;
   }
 }

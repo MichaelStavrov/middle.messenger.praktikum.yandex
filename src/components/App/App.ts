@@ -10,7 +10,7 @@ export class App extends Block {
         </header>
         <main>
           <section class="page">
-            <div id="main-content"></div>
+            <div data-layout=1></div>
           </section>
         </main>
       </div>

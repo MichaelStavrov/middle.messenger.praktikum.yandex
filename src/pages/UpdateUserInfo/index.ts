@@ -1,1 +1,1 @@
-export { UpdateUserInfo as default } from './UpdateUserInfo';
+export { default } from './UpdateUserInfo';

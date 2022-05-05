@@ -32,6 +32,11 @@ export class BrowserRouter {
   }
 
   start() {
+    if (!window.store.getState().user?.id) {
+      this.go('/');
+      return;
+    }
+
     window.onpopstate = ((event: PopStateEvent) => {
       this._onRoute((event.currentTarget as Window)?.location.pathname);
     }).bind(this);

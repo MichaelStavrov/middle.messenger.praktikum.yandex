@@ -1,8 +1,27 @@
+import { sendRegisterData } from '../../services/auth';
 import Block from '../../utils/Block';
+import { BrowserRouter } from '../../utils/BrowserRouter';
+import { Store } from '../../utils/Store';
 import validateForm from '../../utils/validateForm';
+import { withRouter } from '../../utils/withRouter';
+import { withStore } from '../../utils/withStore';
 import './SignUp.scss';
 
-export class SignUpPage extends Block {
+export interface SignUpPageProps {
+  router: BrowserRouter;
+  store: Store<AppState>;
+  formError?: () => string | null;
+}
+
+export class SignUpPage extends Block<SignUpPageProps> {
+  constructor(props: SignUpPageProps) {
+    super(props);
+
+    this.setProps({
+      formError: () => this.props.store.getState().registerFormError,
+    });
+  }
+
   protected getStateFromProps() {
     this.state = {
       values: {
@@ -50,7 +69,7 @@ export class SignUpPage extends Block {
         this.setState(nextState);
 
         if (!Object.values(this.state.errors).some(Boolean)) {
-          console.log(this.state.values);
+          this.props.store.dispatch(sendRegisterData, this.state.values);
         }
       },
     };
@@ -129,6 +148,7 @@ export class SignUpPage extends Block {
             ref="password_confirm"
             onFocus=onFocus
           }}}
+          {{{ErrorComponent value=formError}}}
           </fieldset>
           <div class="sign-up-form-contolrs">
             {{{Button
@@ -146,3 +166,5 @@ export class SignUpPage extends Block {
     `;
   }
 }
+
+export default withRouter(withStore(SignUpPage));

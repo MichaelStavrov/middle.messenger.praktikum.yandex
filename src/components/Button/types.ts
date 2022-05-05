@@ -3,4 +3,5 @@ export interface ButtonProps {
   text: string;
   onClick?: () => void;
   onSubmit?: (e?: SubmitEvent) => void;
+  styles?: string;
 }

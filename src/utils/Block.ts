@@ -4,11 +4,17 @@ import Handlebars from 'handlebars';
 
 type Events = Values<typeof Block.EVENTS>;
 
+export interface BlockClass<P> extends Function {
+  new (props: P): Block<P>;
+  componentName?: string;
+}
+
 export default class Block<P = any> {
   static EVENTS = {
     INIT: 'init',
     FLOW_CDM: 'flow:component-did-mount',
     FLOW_CDU: 'flow:component-did-update',
+    FLOW_CWU: 'flow:component-will-unmount',
     FLOW_RENDER: 'flow:render',
   } as const;
 
@@ -22,6 +28,8 @@ export default class Block<P = any> {
 
   protected state: any = {};
   protected refs: { [key: string]: HTMLElement } = {};
+
+  public static componentName?: string;
 
   public constructor(props?: P) {
     const eventBus = new EventBus<Events>();
@@ -38,10 +46,22 @@ export default class Block<P = any> {
     eventBus.emit(Block.EVENTS.INIT, this.props);
   }
 
+  _checkInDom() {
+    const elementInDOM = document.body.contains(this._element);
+
+    if (elementInDOM) {
+      setTimeout(() => this._checkInDom(), 1000);
+      return;
+    }
+
+    this.eventBus().emit(Block.EVENTS.FLOW_CWU, this.props);
+  }
+
   _registerEvents(eventBus: EventBus<Events>) {
     eventBus.on(Block.EVENTS.INIT, this.init.bind(this));
     eventBus.on(Block.EVENTS.FLOW_CDM, this._componentDidMount.bind(this));
     eventBus.on(Block.EVENTS.FLOW_CDU, this._componentDidUpdate.bind(this));
+    eventBus.on(Block.EVENTS.FLOW_CWU, this._componentWillUnmount.bind(this));
     eventBus.on(Block.EVENTS.FLOW_RENDER, this._render.bind(this));
   }
 
@@ -59,11 +79,21 @@ export default class Block<P = any> {
   }
 
   _componentDidMount(props: P) {
+    this._checkInDom();
     this.componentDidMount(props);
   }
 
   componentDidMount(props: P) {
     props;
+  }
+
+  _componentWillUnmount() {
+    this.eventBus().destroy();
+    this.componentWillUnmount();
+  }
+
+  componentWillUnmount() {
+    return;
   }
 
   _componentDidUpdate(oldProps: P, newProps: P) {
@@ -81,7 +111,7 @@ export default class Block<P = any> {
     return true;
   }
 
-  setProps = (nextProps: P) => {
+  setProps = (nextProps: Partial<P>) => {
     if (!nextProps) {
       return;
     }
@@ -205,7 +235,17 @@ export default class Block<P = any> {
         return;
       }
 
-      stub.replaceWith(component.getContent());
+      // stub.replaceWith(component.getContent());
+      const stubChilds = stub.childNodes.length ? stub.childNodes : [];
+
+      const content = component.getContent();
+      stub.replaceWith(content);
+
+      const layoutContent = content.querySelector('[data-layout="1"]');
+
+      if (layoutContent && stubChilds.length) {
+        layoutContent.append(...stubChilds);
+      }
     });
 
     return fragment.content;

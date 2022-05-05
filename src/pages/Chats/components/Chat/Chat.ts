@@ -1,17 +1,18 @@
 import Block from '../../../../utils/Block';
 import { ChatProps } from './types';
 import './Chat.scss';
+import { EventsProps } from '../../../../types';
 
-export class Chat extends Block<ChatProps> {
+export class Chat extends Block<ChatProps & EventsProps> {
   public static componentName = 'Chat';
 
-  constructor(props: ChatProps) {
-    super(props);
+  constructor({ onClick, id, ...rest }: ChatProps) {
+    super({ events: { click: onClick }, id, ...rest });
   }
 
   protected render(): string {
     return `
-      <div class="chat">
+      <div class="chat" data-chat-id="{{id}}">
         <div class="chat-avatar">
         </div>
         <div class="chat-content">

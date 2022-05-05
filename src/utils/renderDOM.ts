@@ -1,15 +1,8 @@
 import Block from './Block';
 
-let root: HTMLElement | null = null;
-
 export default function renderDOM(block: Block) {
-  if (root) {
-    const main = document.querySelector('#main-content');
-    main!.appendChild(block.getContent());
-    return;
-  }
+  const root = document.querySelector('#root');
 
-  root = document.querySelector('#root');
-
+  root!.innerHTML = '';
   root!.appendChild(block.getContent());
 }

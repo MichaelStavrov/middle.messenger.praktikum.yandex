@@ -1,9 +1,24 @@
+import { logout } from '../../../../services/auth';
 import Block from '../../../../utils/Block';
-
+import { withRouter } from '../../../../utils/withRouter';
+import { withStore } from '../../../../utils/withStore';
+import { UserOptionsProps } from './types';
 import './UserOptions.scss';
 
-export class UserOptions extends Block {
+export class UserOptions extends Block<UserOptionsProps> {
   public static componentName = 'UserOptions';
+
+  constructor(props: UserOptionsProps) {
+    super(props);
+  }
+
+  protected getStateFromProps() {
+    this.state = {
+      onLogout: () => {
+        this.props.store.dispatch(logout);
+      },
+    };
+  }
 
   protected render(): string {
     return `
@@ -21,13 +36,15 @@ export class UserOptions extends Block {
           }}}
         </li>
         <li class="user-options-item">
-          {{{CustomLink
-            text="Выйти"
-            href="/sign-in"
-            className="danger"
-          }}}
+        {{{Button
+          type="submit"
+          text="Выйти"
+          onClick=onLogout
+        }}}
         </li>
       </ul>
     `;
   }
 }
+
+export default withRouter(withStore(UserOptions));
