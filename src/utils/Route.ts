@@ -24,6 +24,12 @@ export class Route {
     }
   }
 
+  leave() {
+    if (this._block) {
+      this._block.hide();
+    }
+  }
+
   match(pathname: string) {
     return isEqual(pathname, this._pathname);
   }
