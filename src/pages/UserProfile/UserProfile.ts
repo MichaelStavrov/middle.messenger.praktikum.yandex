@@ -2,39 +2,79 @@ import Block from '../../utils/Block';
 import UserAvatar from './components/UserAvatar';
 import UserOptions from './components/UserOptions';
 import { registerComponent } from '../../utils';
-import avatar from '../../assets/dan_abramov.jpeg';
-import arrowBack from '../../assets/arrow-back.svg';
+import { withRouter } from '../../utils/withRouter';
+import { withStore } from '../../utils/withStore';
+import { getUserInfoRows } from './utils/getUserInfoRows';
+import { getUser, logout } from '../../services/auth';
+import { UserProfileProps } from './types';
 import './UserProfile.scss';
 
 registerComponent(UserAvatar);
 registerComponent(UserOptions);
+export class UserProfile extends Block<UserProfileProps> {
+  static componentName = 'UserProfile';
 
-export class UserProfile extends Block {
+  constructor(props: UserProfileProps) {
+    super(props);
+
+    if (!this.props.store.getState().user) {
+      this.props.store.dispatch(getUser);
+    }
+
+    this.setProps({
+      onLogout: () => this.props.store.dispatch(logout),
+    });
+  }
+
+  componentDidMount(): void {
+    this.setState({
+      userInfoRows: getUserInfoRows(
+        this.state.userInfoRows,
+        this.props.store.getState().user
+      ),
+    });
+  }
+
   protected getStateFromProps() {
     this.state = {
       userInfoRows: [
-        { label: 'Почта', value: 'danchik@yandex.ru' },
-        { label: 'Логин', value: 'YaDan' },
-        { label: 'Имя', value: 'Dan' },
-        { label: 'Фамилия', value: 'Baramov' },
-        { label: 'Имя в чате', value: 'DB' },
-        { label: 'Телефон', value: '+0 (000) 000 00 00' },
+        { name: 'email', label: 'Почта', value: '-' },
+        { name: 'login', label: 'Логин', value: '-' },
+        { name: 'firstName', label: 'Имя', value: '-' },
+        { name: 'secondName', label: 'Фамилия', value: '-' },
+        { name: 'displayName', label: 'Имя в чате', value: '-' },
+        { name: 'phone', label: 'Телефон', value: '-' },
       ],
     };
   }
 
   protected render(): string {
+    const avatar = this.props.store.getState().user?.avatar;
+    const userName = this.props.store.getState().user?.firstName;
+
     return `
       <div class="user-profile">
         <div class="user-profile-container">
-          <a class="user-profile-link-to-back" href="/">
-            <img class="user-profile-icon-back" src=${arrowBack} alt="вернуться назад"/>
-          </a>
-          {{{UserAvatar
-            image="${avatar}"
-            alt="Аватарка"
-            userName="Dan"
+          {{{CustomLink
+            text="Назад к чатам"
+            href="/chats"
+            className="user-profile-icon-back"
           }}}
+          ${
+            avatar
+              ? `
+                {{{UserAvatar
+                  avatar="https://ya-praktikum.tech/api/v2/resources/${avatar}"
+                  alt="Аватарка"
+                  userName="${userName}"
+                }}}
+              `
+              : `
+                {{{UserAvatar
+                  alt="Аватарка"
+                }}}
+              `
+          }
           <ul class="user-info-list">
             {{#each userInfoRows}}
               <li class="user-info-item">
@@ -49,3 +89,5 @@ export class UserProfile extends Block {
     `;
   }
 }
+
+export default withRouter(withStore(UserProfile));

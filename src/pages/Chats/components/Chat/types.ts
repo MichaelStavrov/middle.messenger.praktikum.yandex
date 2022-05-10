@@ -3,4 +3,6 @@ export interface ChatProps {
   title: string;
   time: string;
   subtitle: string;
+  id: number;
+  onClick?: () => void;
 }

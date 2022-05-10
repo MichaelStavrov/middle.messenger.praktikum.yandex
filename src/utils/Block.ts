@@ -4,11 +4,17 @@ import Handlebars from 'handlebars';
 
 type Events = Values<typeof Block.EVENTS>;
 
+export interface BlockClass<P> extends Function {
+  new (props: P): Block<P>;
+  componentName?: string;
+}
+
 export default class Block<P = any> {
   static EVENTS = {
     INIT: 'init',
     FLOW_CDM: 'flow:component-did-mount',
     FLOW_CDU: 'flow:component-did-update',
+    FLOW_CWU: 'flow:component-will-unmount',
     FLOW_RENDER: 'flow:render',
   } as const;
 
@@ -22,6 +28,8 @@ export default class Block<P = any> {
 
   protected state: any = {};
   protected refs: { [key: string]: HTMLElement } = {};
+
+  public static componentName?: string;
 
   public constructor(props?: P) {
     const eventBus = new EventBus<Events>();
@@ -38,10 +46,22 @@ export default class Block<P = any> {
     eventBus.emit(Block.EVENTS.INIT, this.props);
   }
 
+  private _checkInDom() {
+    const elementInDOM = document.body.contains(this._element);
+
+    if (elementInDOM) {
+      setTimeout(() => this._checkInDom(), 1000);
+      return;
+    }
+
+    this.eventBus().emit(Block.EVENTS.FLOW_CWU, this.props);
+  }
+
   _registerEvents(eventBus: EventBus<Events>) {
     eventBus.on(Block.EVENTS.INIT, this.init.bind(this));
     eventBus.on(Block.EVENTS.FLOW_CDM, this._componentDidMount.bind(this));
     eventBus.on(Block.EVENTS.FLOW_CDU, this._componentDidUpdate.bind(this));
+    eventBus.on(Block.EVENTS.FLOW_CWU, this._componentWillUnmount.bind(this));
     eventBus.on(Block.EVENTS.FLOW_RENDER, this._render.bind(this));
   }
 
@@ -59,6 +79,7 @@ export default class Block<P = any> {
   }
 
   _componentDidMount(props: P) {
+    this._checkInDom();
     this.componentDidMount(props);
   }
 
@@ -66,7 +87,19 @@ export default class Block<P = any> {
     props;
   }
 
+  _componentWillUnmount() {
+    this.eventBus().destroy();
+    this.componentWillUnmount();
+  }
+
+  componentWillUnmount() {
+    return;
+  }
+
   _componentDidUpdate(oldProps: P, newProps: P) {
+    // if (this._element && this._element.style.display === 'none') {
+    //   return;
+    // }
     const response = this.componentDidUpdate(oldProps, newProps);
     if (!response) {
       return;
@@ -78,11 +111,10 @@ export default class Block<P = any> {
     return true;
   }
 
-  setProps = (nextProps: P) => {
+  setProps = (nextProps: Partial<P>) => {
     if (!nextProps) {
       return;
     }
-    console.log(nextProps);
 
     Object.assign(this.props as any, nextProps);
   };
@@ -203,7 +235,17 @@ export default class Block<P = any> {
         return;
       }
 
-      stub.replaceWith(component.getContent());
+      // stub.replaceWith(component.getContent());
+      const stubChilds = stub.childNodes.length ? stub.childNodes : [];
+
+      const content = component.getContent();
+      stub.replaceWith(content);
+
+      const layoutContent = content.querySelector('[data-layout="1"]');
+
+      if (layoutContent && stubChilds.length) {
+        layoutContent.append(...stubChilds);
+      }
     });
 
     return fragment.content;
@@ -217,68 +259,11 @@ export default class Block<P = any> {
     errorElem.style.visibility = 'hidden';
   }
 
-  // validateForm({ errorsState, inputName, inputValue }: ValidateForm) {
-  //   switch (inputName) {
-  //     case 'first_name':
-  //     case 'second_name':
-  //       if (!inputValue.match(/^[A-Z|А-Я]/)) {
-  //         errorsState[inputName] = 'Должно быть с заглавной буквы';
-  //       } else if (!inputValue.match(/^[(a-zA-Z)|(а-яА-Я)|-]+$/)) {
-  //         errorsState[inputName] = 'Только буквы или знак дефиса';
-  //       } else {
-  //         errorsState[inputName] = '';
-  //       }
-  //       break;
-  //     case 'login':
-  //       if (inputValue.length < 3 || inputValue.length > 20) {
-  //         errorsState[inputName] = 'От 3 до 20 символов';
-  //       } else if (!inputValue.match(/^[(a-zA-Z)|\d|\-|_]+$/)) {
-  //         errorsState[inputName] =
-  //           'Латиница, цифры без пробелов, знаки - или _';
-  //       } else if (!inputValue.match(/[a-zA-Z]/)) {
-  //         errorsState[inputName] = 'Минимум одна латинская буква';
-  //       } else {
-  //         errorsState[inputName] = '';
-  //       }
-  //       break;
-  //     case 'email':
-  //       if (!inputValue.match(/^[(a-zA-Z)|\d|-|@|.]+$/)) {
-  //         errorsState[inputName] = 'Латиница, цифры без пробелов или дефис';
-  //       } else if (!inputValue.match(/(@\w+\.)/)) {
-  //         errorsState[inputName] = 'Email указан некорректно';
-  //       } else {
-  //         errorsState[inputName] = '';
-  //       }
-  //       break;
-  //     case 'password':
-  //       if (inputValue.length < 8 || inputValue.length > 40) {
-  //         errorsState[inputName] = 'От 8 до 40 символов';
-  //       } else if (!inputValue.match(/[A-Z]/)) {
-  //         errorsState[inputName] = 'Хотя бы одна заглаваня буква';
-  //       } else if (!inputValue.match(/\d/)) {
-  //         errorsState[inputName] = 'Хотя бы одна цифра';
-  //       } else {
-  //         errorsState[inputName] = '';
-  //       }
-  //       break;
-  //     case 'phone':
-  //       if (inputValue.length < 10 || inputValue.length > 15) {
-  //         errorsState[inputName] = 'От 10 до 15 символов';
-  //       } else if (!inputValue.match(/^(\+|\d)(\d+$)/)) {
-  //         errorsState[inputName] = 'Только цифры или первый +';
-  //       } else {
-  //         errorsState[inputName] = '';
-  //       }
-  //       break;
-  //     case 'message':
-  //       if (!inputValue) {
-  //         errorsState[inputName] = 'Введите сообщение';
-  //       } else {
-  //         errorsState[inputName] = '';
-  //       }
-  //       break;
-  //     default:
-  //       break;
-  //   }
-  // }
+  show() {
+    this.getContent().style.display = 'flex';
+  }
+
+  hide() {
+    this.getContent().style.display = 'none';
+  }
 }

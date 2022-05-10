@@ -23,13 +23,13 @@ export class Header extends Block {
         <li>
           {{{CustomLink
             text="Чаты"
-            href="/"
+            href="/chats"
           }}}
         </li>
         <li>
           {{{CustomLink
             text="Профиль"
-            href="/user-profile"
+            href="/profile"
           }}}
         </li>
         <li>

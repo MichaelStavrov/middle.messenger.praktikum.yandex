@@ -6,10 +6,31 @@
   gap: 20px;
 }
 
-.user-avatar {
+.user-avatar-wrapper {
+  position: relative;
+
+  &:hover {
+    opacity: 0.7;
+  }
+}
+
+.user-avatar,
+.user-avatar-alt {
   width: 130px;
   height: 130px;
   border-radius: 50%;
+}
+
+.user-avatar-input-file {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+}
+
+.user-avatar-alt {
+  background-color: var(--light-gray);
 }
 
 .user-avatar-name {

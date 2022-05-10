@@ -16,7 +16,13 @@ export class Button extends Block<ButtonProps & EventsProps> {
 
   protected render(): string {
     return `
-      <button class="button {{className}}" type="{{type}}">{{text}}</button>
+      <button 
+        class="button {{className}}"
+        type="{{type}}"
+        style="{{styles}}"
+      >
+        {{text}}
+      </button>
     `;
   }
 }

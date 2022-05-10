@@ -1,4 +1,5 @@
 import Block from '../../utils/Block';
+import { withRouter } from '../../utils/withRouter';
 import { CustomLinkProps } from './types';
 import { EventsProps } from '../../types';
 import './CustomLink.scss';
@@ -6,8 +7,19 @@ import './CustomLink.scss';
 export class CustomLink extends Block<CustomLinkProps & EventsProps> {
   public static componentName = 'CustomLink';
 
-  constructor({ onClick, ...rest }: CustomLinkProps) {
-    super({ events: { click: onClick }, ...rest });
+  constructor({ onClick, href, router, ...rest }: CustomLinkProps) {
+    super({ events: { click: onClick }, href, router, ...rest });
+    this.setProps({
+      href,
+      events: {
+        ...this.props.events,
+        click: (e) => {
+          e.preventDefault();
+          router.go(href);
+        },
+      },
+      router,
+    });
   }
 
   protected render(): string {
@@ -16,3 +28,5 @@ export class CustomLink extends Block<CustomLinkProps & EventsProps> {
     `;
   }
 }
+
+export default withRouter(CustomLink);

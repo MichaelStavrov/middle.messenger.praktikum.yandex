@@ -1,8 +1,44 @@
+import { getUser } from '../../services/auth';
+import { changeUserInfo } from '../../services/user';
 import Block from '../../utils/Block';
+import { BrowserRouter } from '../../utils/BrowserRouter';
+import { Store } from '../../utils/Store';
 import validateForm from '../../utils/validateForm';
+import { withRouter } from '../../utils/withRouter';
+import { withStore } from '../../utils/withStore';
 import './UpdateUserInfo.scss';
 
-export class UpdateUserInfo extends Block {
+export interface UpdateUserInfoProps {
+  router: BrowserRouter;
+  store: Store<AppState>;
+}
+
+export class UpdateUserInfo extends Block<UpdateUserInfoProps> {
+  constructor(props: UpdateUserInfoProps) {
+    super(props);
+
+    if (!this.props.store.getState().user) {
+      this.props.store.dispatch(getUser);
+    }
+  }
+
+  componentDidMount(): void {
+    const { user } = this.props.store.getState();
+    if (user) {
+      const { login, email, displayName, firstName, secondName, phone } = user;
+      this.setState({
+        values: {
+          login,
+          email,
+          first_name: firstName,
+          second_name: secondName,
+          display_name: displayName || '',
+          phone,
+        },
+      });
+    }
+  }
+
   protected getStateFromProps() {
     this.state = {
       values: {
@@ -47,7 +83,7 @@ export class UpdateUserInfo extends Block {
         this.setState(nextState);
 
         if (!Object.values(this.state.errors).some(Boolean)) {
-          console.log(this.state.values);
+          this.props.store.dispatch(changeUserInfo, this.state.values);
         }
       },
     };
@@ -134,3 +170,5 @@ export class UpdateUserInfo extends Block {
     `;
   }
 }
+
+export default withRouter(withStore(UpdateUserInfo));

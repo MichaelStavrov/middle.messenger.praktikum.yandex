@@ -3,6 +3,7 @@ interface RequestOptions {
   method?: string;
   data?: any;
   timeout?: number;
+  mode?: string;
 }
 
 const METHODS: Record<string, string> = {
@@ -23,7 +24,9 @@ function queryStringify(data: Record<string, unknown>) {
   }, '?');
 }
 
-class HTTPTransport {
+const baseUrl = 'https://ya-praktikum.tech/api/v2/';
+
+export default class HTTPTransport {
   get = (url: string, options: RequestOptions = {}) => {
     return this.request(
       url,
@@ -56,8 +59,16 @@ class HTTPTransport {
     );
   };
 
-  request = (url: string, options: RequestOptions = {}, timeout = 5000) => {
-    const { headers = {}, method, data } = options;
+  request = (
+    url: string,
+    options: RequestOptions = {},
+    timeout = 5000
+  ): Promise<XMLHttpRequest> => {
+    const {
+      headers = { 'Content-Type': 'application/json' },
+      method,
+      data,
+    } = options;
 
     return new Promise(function (resolve, reject) {
       if (!method) {
@@ -67,8 +78,13 @@ class HTTPTransport {
 
       const xhr = new XMLHttpRequest();
       const isGet = method === METHODS.GET;
+      const withBaseUrl = `${baseUrl}${url}`;
 
-      xhr.open(method, isGet && !!data ? `${url}${queryStringify(data)}` : url);
+      xhr.open(
+        method,
+        isGet && !!data ? `${withBaseUrl}${queryStringify(data)}` : withBaseUrl
+      );
+      xhr.withCredentials = true;
 
       Object.keys(headers).forEach((key) => {
         xhr.setRequestHeader(key, headers[key]);
@@ -87,7 +103,11 @@ class HTTPTransport {
       if (isGet || !data) {
         xhr.send();
       } else {
-        xhr.send(data);
+        if (headers['Content-Type'] === 'application/json') {
+          xhr.send(JSON.stringify(data));
+        } else {
+          xhr.send(data);
+        }
       }
     });
   };

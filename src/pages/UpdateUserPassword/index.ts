@@ -1,1 +1,1 @@
-export { UpdateUserPassword as default } from './UpdateUserPassword';
+export { default } from './UpdateUserPassword';

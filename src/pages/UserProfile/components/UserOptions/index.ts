@@ -1,1 +1,1 @@
-export { UserOptions as default } from './UserOptions';
+export { default } from './UserOptions';

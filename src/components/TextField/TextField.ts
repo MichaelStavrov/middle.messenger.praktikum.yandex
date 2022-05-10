@@ -9,6 +9,7 @@ export class TextField extends Block<TextFieldProps & EventsProps> {
 
   constructor({
     onFocus,
+    onChange,
     type = 'text',
     value,
     error,
@@ -20,8 +21,15 @@ export class TextField extends Block<TextFieldProps & EventsProps> {
       error,
       value,
       textarea,
-      events: { focus: onFocus },
+      events: { focus: onFocus, change: onChange },
       ...rest,
+    });
+
+    this.setProps({
+      events: {
+        ...this.props.events,
+        blur: this.state.onBlur,
+      },
     });
   }
 
@@ -57,10 +65,6 @@ export class TextField extends Block<TextFieldProps & EventsProps> {
   }
 
   protected render(): string {
-    Object.assign(this.props.events, {
-      blur: this.state.onBlur,
-    });
-
     return `
       <div class="text-field">
         {{#if label}}
