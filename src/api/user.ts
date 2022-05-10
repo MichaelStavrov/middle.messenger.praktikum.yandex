@@ -1,7 +1,6 @@
 import HTTPTransport from '../utils/HTTPTransport';
 
 const request = new HTTPTransport();
-const baseUrl = 'https://ya-praktikum.tech/api/v2';
 
 export type APIError = {
   reason: string;
@@ -23,16 +22,15 @@ export interface NewUserInfo {
 
 export const userAPI = {
   sendAvatar: (data: FormData) =>
-    request.put(`${baseUrl}/user/profile/avatar`, {
+    request.put(`user/profile/avatar`, {
       data,
       headers: {},
     }),
 
   sendNewPassword: (data: NewPasswordData) =>
-    request.put(`${baseUrl}/user/password`, { data }),
+    request.put(`user/password`, { data }),
 
-  sendNewUserInfo: (data: NewUserInfo) =>
-    request.put(`${baseUrl}/user/profile`, { data }),
+  sendNewUserInfo: (data: NewUserInfo) => request.put(`user/profile`, { data }),
 
-  getUserInfo: (id: number) => request.get(`${baseUrl}/user/${id}`),
+  getUserInfo: (id: number) => request.get(`user/${id}`),
 };

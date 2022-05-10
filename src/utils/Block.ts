@@ -46,7 +46,7 @@ export default class Block<P = any> {
     eventBus.emit(Block.EVENTS.INIT, this.props);
   }
 
-  _checkInDom() {
+  private _checkInDom() {
     const elementInDOM = document.body.contains(this._element);
 
     if (elementInDOM) {

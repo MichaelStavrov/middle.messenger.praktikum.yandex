@@ -1,7 +1,6 @@
 import HTTPTransport from '../utils/HTTPTransport';
 
 const request = new HTTPTransport();
-const baseUrl = 'https://ya-praktikum.tech/api/v2';
 
 type LoginRequestData = {
   login: string;
@@ -22,12 +21,11 @@ export interface NewUser {
 }
 
 export const authAPI = {
-  login: (data: LoginRequestData) =>
-    request.post(`${baseUrl}/auth/signin`, { data }),
+  login: (data: LoginRequestData) => request.post(`auth/signin`, { data }),
 
-  register: (data: NewUser) => request.post(`${baseUrl}/auth/signup`, { data }),
+  register: (data: NewUser) => request.post(`auth/signup`, { data }),
 
-  me: () => request.get(`${baseUrl}/auth/user`),
+  me: () => request.get(`auth/user`),
 
-  logout: () => request.post(`${baseUrl}/auth/logout`),
+  logout: () => request.post(`auth/logout`),
 };

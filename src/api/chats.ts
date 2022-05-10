@@ -1,7 +1,6 @@
 import HTTPTransport from '../utils/HTTPTransport';
 
 const request = new HTTPTransport();
-const baseUrl = 'https://ya-praktikum.tech/api/v2';
 
 export interface CreateSoketProps {
   userId: number;
@@ -10,29 +9,25 @@ export interface CreateSoketProps {
 }
 
 export const chatsAPI = {
-  addChat: (data: { title: string }) =>
-    request.post(`${baseUrl}/chats`, { data }),
+  addChat: (data: { title: string }) => request.post(`chats`, { data }),
 
   getChats: (data?: { offset?: number; limit?: number; title?: string }) =>
-    request.get(`${baseUrl}/chats`, { data }),
+    request.get(`chats`, { data }),
 
-  deleteChat: (data: { chatId: number }) =>
-    request.delete(`${baseUrl}/chats`, { data }),
+  deleteChat: (data: { chatId: number }) => request.delete(`chats`, { data }),
 
   searchUser: (data: { login: string }) =>
-    request.post(`${baseUrl}/user/search`, { data }),
+    request.post(`user/search`, { data }),
 
-  getUserById: (id: number) => request.get(`${baseUrl}/user/${id}`),
+  getUserById: (id: number) => request.get(`user/${id}`),
 
-  getChatUsers: (chatId: number) =>
-    request.get(`${baseUrl}/chats/${chatId}/users`),
+  getChatUsers: (chatId: number) => request.get(`chats/${chatId}/users`),
 
   addUserToChat: (data: { users: number[]; chatId: number }) =>
-    request.put(`${baseUrl}/chats/users`, { data }),
+    request.put(`chats/users`, { data }),
 
   deleteUserFromChat: (data: { users: number[]; chatId: number }) =>
-    request.delete(`${baseUrl}/chats/users`, { data }),
+    request.delete(`chats/users`, { data }),
 
-  getChatToken: (chatId: number) =>
-    request.post(`${baseUrl}/chats/token/${chatId}`),
+  getChatToken: (chatId: number) => request.post(`chats/token/${chatId}`),
 };

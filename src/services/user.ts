@@ -2,14 +2,11 @@ import { authAPI } from '../api/auth';
 import { Dispatch } from '../utils/Store';
 import { hasError } from '../utils/apiHasError';
 import { transformUser } from '../utils/apiTransformers';
-import { UserDTO } from '../api/types';
 import { userAPI, NewPasswordData, NewUserInfo } from '../api/user';
 
 type ChangeAvatarPayload = {
   file: File;
 };
-
-type ResponseType = Record<string, any>;
 
 export const changeAvatar = async (
   dispatch: Dispatch<AppState>,

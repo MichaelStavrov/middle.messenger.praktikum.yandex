@@ -1,9 +1,6 @@
-import { authAPI, NewUser } from '../api/auth';
 import { Dispatch } from '../utils/Store';
 import { hasError } from '../utils/apiHasError';
-import { transformUser } from '../utils/apiTransformers';
-import { UserDTO } from '../api/types';
-import { chatsAPI, CreateSoketProps } from '../api/chats';
+import { chatsAPI } from '../api/chats';
 
 export const getChats = async (
   dispatch: Dispatch<AppState>,

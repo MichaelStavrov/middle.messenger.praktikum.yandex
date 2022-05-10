@@ -24,6 +24,8 @@ function queryStringify(data: Record<string, unknown>) {
   }, '?');
 }
 
+const baseUrl = 'https://ya-praktikum.tech/api/v2/';
+
 export default class HTTPTransport {
   get = (url: string, options: RequestOptions = {}) => {
     return this.request(
@@ -76,8 +78,12 @@ export default class HTTPTransport {
 
       const xhr = new XMLHttpRequest();
       const isGet = method === METHODS.GET;
+      const withBaseUrl = `${baseUrl}${url}`;
 
-      xhr.open(method, isGet && !!data ? `${url}${queryStringify(data)}` : url);
+      xhr.open(
+        method,
+        isGet && !!data ? `${withBaseUrl}${queryStringify(data)}` : withBaseUrl
+      );
       xhr.withCredentials = true;
 
       Object.keys(headers).forEach((key) => {
