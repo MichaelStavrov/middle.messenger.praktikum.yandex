@@ -23,11 +23,6 @@
   "@parcel/transformer-css": {
     "cssModules": true
   },
-  "husky": {
-    "hooks": {
-      "pre-commit": "npm-run-all test"
-    }
-  },
   "devDependencies": {
     "@anikin/parcel-transformer-handlebars": "1.0.9",
     "@anikin/parcel-transformer-handlebars-precompile": "1.0.1",
