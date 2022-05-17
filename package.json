@@ -14,7 +14,7 @@
     "lint-and-fix": "eslint . --ext .ts --fix",
     "serve": "webpack serve --mode=development --progress",
     "build": "webpack",
-    "precommit": "npm test",
+    "precommit": "npm run test",
     "test": "jest"
   },
   "keywords": [],
