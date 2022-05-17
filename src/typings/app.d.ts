@@ -18,7 +18,7 @@ declare global {
   };
 
   export type AppState = {
-    screen: Screens | null;
+    screen: Screen | null;
     isLoading: boolean;
     loginFormError: string | null;
     registerFormError: string | null;
